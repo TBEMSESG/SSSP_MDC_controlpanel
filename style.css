@@ -1,0 +1,234 @@
+body{
+  margin: 0;
+}
+
+
+.control_grid {
+  display: flex;
+  flex-wrap: wrap;
+  width: 1080px;
+  height: 1920px;
+  background-image: url(./img/gioia-m-BBDyRGApCms-unsplash.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  /* background-size: 100%; */
+  align-content: space-around;
+  justify-content: space-around;
+}
+
+.button  {
+  margin: 0 20px;
+  width: 300px;
+  height: 250px; ; 
+  border: 3px solid black;
+  box-shadow: 0 0 2rem 0.5rem black;
+  font-size: 2.8em;
+  color: white;
+  text-align: center;
+  text-shadow: 0.2rem 0.2rem black;
+  background-color:rgba(255, 71, 71, 0.724);
+}
+
+.title {
+	display: block;
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 3rem;
+  text-align: center;
+  justify-content: center ;
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 30%; /* 30 height */
+  /* overflow: auto; Enable scroll if needed */
+  background-color:blue;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  }
+  
+.logo {
+  display: inline-flex;
+/* width: 900px;
+height: 150px ; */
+background-color: none;
+/* justify-content: center;
+align-items: center; */
+}
+
+.logo p {
+  color: white ;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 7rem;
+  text-align: center;
+  justify-content: center ;
+}
+.item1 {
+  /* background-image: url(./img/brooke-lark-HjWzkqW1dgI-unsplash.png); */
+  background-size: contain;
+  flex-shrink: 5;
+  /* flex-shrink: 2; */
+}
+.item2 {
+  background-image: url(./img/thewall.png);
+  background-size: contain;
+  /* flex-shrink: 2; */
+}
+.item3 {
+  background-image: url(./img/smartsignage.png);
+  background-size: contain;
+  /* flex-shrink: 2; */
+}
+
+.item4 {
+  /* background-color: white; */
+  background-image: url(./img/flip.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  /* flex-shrink: 2; */
+}
+.item5 {
+  background-image: url(./img/monitor.png);
+  background-size: contain;
+  /* flex-shrink: 2; */
+}
+.item6 {
+  background-image: url(./img/allinone.png);
+  background-size: contain;
+  /* flex-shrink: 2; */
+}
+.item7 {
+  background-image: url(./img/mobile.png);
+  background-size: contain;
+  /* flex-shrink: 2; */
+}
+.item8 {
+  background-image: url(./img/kiosk.png);
+  background-size: contain;
+  /* flex-shrink: 2; */
+}
+.item9 {
+  background-image: url(./img/tv.png);
+  background-size: contain;
+  /* flex-shrink: 2; */
+}
+.item10 {
+  background-image: url(./img/storage.png);
+  background-size: contain;
+  /* flex-shrink: 2; */
+}
+.item11 {
+  background-image: url(./img/vxt.png);
+  background-size: contain;
+  /* flex-shrink: 2; */
+}
+
+.item12 {
+  background-image: url(./img/QR.png);
+  background-size: contain;
+    background-repeat: no-repeat;
+  
+  /* flex-shrink: 2; */
+}
+
+.control_grid p {
+  display: block;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.active {
+  border: 3px solid rgb(255, 255, 255);
+  box-shadow: 0 0 2rem 1rem rgb(102, 247, 12);
+}
+.error {
+  border: 3px solid rgb(255, 255, 255);
+  box-shadow: 0 0 2rem 1rem rgb(247, 20, 12);
+}
+
+
+/* The Modal (background) */
+#modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  /* overflow: auto; Enable scroll if needed */
+  background-color:blue;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
+
+/* Modal Content (Image) */
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 600px;
+  position: absolute;
+  top: 400px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80%;
+  max-height: 500px;
+}
+
+/* Caption of Modal Image (Image Text) - Same Width as the Image */
+#description {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  color: white;
+  padding: 50px 0;
+  height: 150px;
+  font-family: "SamsungBold", Arial, Helvetica, sans-serif;
+  font-size: 58px;
+}
+
+/* Add Animation - Zoom in the Modal */
+.modal-content,
+#description {
+  animation-name: zoom;
+  animation-duration: 0s;
+}
+
+@keyframes zoom {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* The Close Button */
+.close {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  transition: 0.2s;
+  font-family: "SamsungBold", Arial, Helvetica, sans-serif;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.hidden {
+display: none;	
+}

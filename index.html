@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="text/javascript" src="$WEBAPIS/webapis/webapis.js"></script>
+    <script type="text/javascript" src="$B2BAPIS/b2bapis/b2bapis.js"></script>
+
+</head>
+
+<body>
+    <div class="control_grid">
+        <div class="title hidden" style="color:white;">
+        <div>
+        Kiosk IP: <p id="myIP">...</p>
+        </div>
+        <div>
+        current Target IP: <p id="targetIP">...</p>
+        </div> 
+	        <form id="myForm">
+	        <label for="userInput">Enter the new Target Device IP address:</label>
+	        <input type="text" id="userInput" name="userInput" placeholder="Type here...">
+	        <button type="submit">Submit</button>
+	    	</form>
+        
+   		 </div>
+  <!--  
+
+     <div class="test" style="color:white;">test</div>  
+     
+   --> 
+        <div class="logo">
+            <img src="img/The_Wall.png" alt="">
+        </div>
+        <div class="button item1">
+            <p>BACK</p>
+        </div>
+        <div class="button item2">
+            <p>The Wall</p>
+        </div>
+        <div class="button item3">
+            <p>QxC Series</p>
+        </div>
+        <div class="button item4">
+            <p>Flip</p>
+        </div>
+        <div class="button item5">
+            <p>Monitor</p>
+        </div>
+        <div class="button item6">
+            <p>All-In-One LED</p>
+        </div>
+        <div class="button item7">
+            <p>Mobile</p>
+        </div>
+        <div class="button item8">
+            <p>Kiosk</p>
+        </div>
+        <div class="button item9">
+            <p>WAD</p>
+        </div>
+        <div class="button item10">
+            <p>Storage</p>
+        </div>
+        <div class="button item11">
+            <p>SamsungVXT</p>
+        </div>
+        <div class="button item12">
+            <p>Sign-up</p>
+        </div>
+        <!-- <div class="button item13"><p>content 13</p></div> -->
+    </div>
+<!--    <div id="modal">
+        <img id="close-btn" class="close" src="./images/home.png" alt="Home Icon" width="80" height="80" />
+        <div id="description"></div>
+        <img class="modal-content" id="modal-content" />
+        <div id="specification"></div>
+        <input id="print-btn" type="button" value="Print">
+    </div> 
+    <script language="javascript" type="text/javascript" src="js/socket.io.js"></script> -->
+    <script src="listeners.js"></script>
+</body>
+
+</html>
