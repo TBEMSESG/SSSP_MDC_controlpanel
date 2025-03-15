@@ -396,7 +396,7 @@ var init = function () {
 
     ipPlaceholder.innerText = currentIP || "unknown"    
     	
-    	  // getSubnmit from Settings: 
+    	  // getSubmit from Settings: 
         document.getElementById('myForm').addEventListener('submit', function(event) {
             // Prevent the form from submitting in the traditional way
             event.preventDefault();
