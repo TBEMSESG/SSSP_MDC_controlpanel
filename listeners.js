@@ -415,22 +415,22 @@ var init = function () {
     // Check for logoclicks to open settings info 
     // by clicking the logo fast 7 times, a small settings page opens to change the target IP address for the UDP commands
     
-    logoButton.addEventListener("click", function () {
+    // logoButton.addEventListener("click", function () {
     	
-    	console.log("counting ..." + counter);
-    	if (counter < 7){
-    		setTimeout( function () {counter = 0} , 3000 ) 
+    // 	console.log("counting ..." + counter);
+    // 	if (counter < 7){
+    // 		setTimeout( function () {counter = 0} , 3000 ) 
 
-    		counter ++
-    	}
-    	if (counter === 7) {
-    		title.classList.remove("hidden");
-    		setTimeout(function () {title.classList.add("hidden")}, 20000)
-    		counter = 0
-    	}
+    // 		counter ++
+    // 	}
+    // 	if (counter === 7) {
+    // 		title.classList.remove("hidden");
+    // 		setTimeout(function () {title.classList.add("hidden")}, 20000)
+    // 		counter = 0
+    // 	}
     	
-    }		 
-    )
+    // }		 
+    // )
     
   	
     		
@@ -482,10 +482,9 @@ var init = function () {
     button10.addEventListener('click', function () { messageManager.sendTest(comms[9], "myUDP");
 
     });
-    button11.addEventListener('click', function () { messageManager.sendTest(comms[10], "myUDP");
+    // button11.addEventListener('click', function () { messageManager.sendTest(comms[10], "myUDP");
 
-    });
-
+    // });
 
 
 

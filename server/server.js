@@ -95,9 +95,9 @@ var messageManager = (function () {
     	});
 
     	// Start the server
-//    server.listen(3000, function() {
-//    	  sendMessage('Server is running on http://localhost:3000');
-//    	});
+   server.listen(3000, function() {
+   	  sendMessage(`Server is running on http://${hosts}:3000`);
+   	});
     
   
     

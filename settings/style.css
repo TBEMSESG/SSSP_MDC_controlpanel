@@ -1,4 +1,9 @@
+body {
+    font-size: x-large;
+}
+
 header {
     background-color: red;
     color: white;
+    font-size: xx-large;
 }

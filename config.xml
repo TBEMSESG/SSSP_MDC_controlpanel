@@ -7,8 +7,7 @@
     <description>MDC sending Frontend for Smart Signage</description>
     <feature name="http://tizen.org/feature/screen.size.normal.1920.1080"/>
     <icon src="icon.png"/>
-    <name>
-    MDCController</name>
+    <name>MDCController</name>
     <tizen:privilege name="http://tizen.org/privilege/internet"/>
     <tizen:privilege name="http://tizen.org/privilege/push"/>
     <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>
