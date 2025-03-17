@@ -16,16 +16,20 @@ var messageManager = (function () {
  
     var localMsgPort;
     var remoteMsgPort;
+    var remoteMsgPortWeb;
     var listenerId;
     
     function init () {
         var messagePortName = 'BG_SERVICE_COMMUNICATION';
         var calleeAppId = 'hlHpt0841o.CONNECTKiosk';
+        var webServiceId = "hlHpt0841o.WebService";
+
 
         remoteMsgPort = tizen.messageport.requestRemoteMessagePort(
-            calleeAppId,
-            messagePortName
-        );
+          calleeAppId,
+          messagePortName
+      );
+       
         
         localMsgPort = tizen.messageport.requestLocalMessagePort(messagePortName);
         listenerId = localMsgPort.addMessagePortListener(onMessageReceived);
@@ -33,6 +37,7 @@ var messageManager = (function () {
         
         sendMessage( hosts, "targetIP") // sends the hardcoded Target IP to the frontend
         sendCommand("started");  // sends the confirmatieno thet the service is started
+        sendMessage("BG Started")
         //runServer();
       
     };
@@ -132,49 +137,43 @@ var messageManager = (function () {
     function onMessageReceived(data) {
         sendMessage('BG service receive data: ' + JSON.stringify(data));
         
-        
-        
         if (data[0].key === "myUDP") {
-            sendMessage("myUDP Key received, going to sendUDP with comamand: " + data[0].value);
-
-            try {
-                // Assuming `hosts` and `portUDP` are defined and valid
-                sendUDP(hosts, portUDP, data[0].value);
-                sendMessage(`UDP message sent successfully to ${hosts}`);
-            } catch (error) {
-                sendMessage("Failed to send UDP message: " + error.message);
-                console.error("UDP sending error: ", error);
+                sendMessage("myUDP Key received, going to sendUDP with comamand: " + data[0].value);
+                try {
+                    // Assuming `hosts` and `portUDP` are defined and valid
+                    sendUDP(hosts, portUDP, data[0].value);
+                    sendMessage(`UDP message sent successfully to ${hosts}`);
+                } catch (error) {
+                    sendMessage("Failed to send UDP message: " + error.message);
+                    console.error("UDP sending error: ", error);
+                }
             }
-        }
-        
         if (data[0].key === "settings") {
-            sendMessage("settings Key received, going to overwrite current targetip with: " + data[0].value);
+            sendMessage(" Background settings Key received, going to overwrite current targetip with: " + data[0].value);
             hosts = data[0].value
            
-        }
-        	
-        
+        }        
     };
     
     function sendUDP(host, port, command) {
-        sendMessage("Invoked sendUDP with: host=" + host + ", port=" + port + ", command=" + command);
+        sendMessage("BG - Invoked sendUDP with: host=" + host + ", port=" + port + ", command=" + command);
 
         // Create a buffer from the command using the older Buffer constructor
         var message = new Buffer(command);
 
-        sendMessage("Prepared message buffer: " + message + " with length: " + message.length);
+        sendMessage("BG - Prepared message buffer: " + message + " with length: " + message.length);
 
         // Create UDP socket
         var socket = dgram.createSocket('udp4');
         
-        sendMessage("Socket created...");
+        sendMessage("BG - Socket created...");
 
         // Send the UDP message
         socket.send(message, 0, message.length, port, host, function (err) {
             if (err) {
-                sendMessage("Error sending UDP message: " + err.message);
+                sendMessage("BG - Error sending UDP message: " + err.message);
             } else {
-                sendMessage("UDP message sent successfully to " + host + ":" + port);
+                sendMessage("BG - UDP message sent successfully to " + host + ":" + port);
             }
             socket.close();
         });
@@ -210,6 +209,6 @@ module.exports.onRequest = function () {
 };
 
 module.exports.onExit = function () {
-    messageManager.sendMessage("Service is exiting... ")
-    messageManager.sendCommand("terminated")
+    messageManager.sendMessage("BG Service is exiting... ")
+    messageManager.sendCommand("BG terminated")
 };

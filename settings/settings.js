@@ -7,8 +7,8 @@ var path = require('path');
 
 // Env settings
 
-var hosts = "10.10.99.150"  //to be changed from Frontend settings?
-var portUDP = 5000;
+// var hosts = "10.10.99.150"  //to be changed from Frontend settings?
+// var portUDP = 5000;
 
 
 // Starting the Message Manager between front and backend
@@ -20,19 +20,21 @@ var messageManager = (function () {
     
     function init () {
         var messagePortName = 'WEB_SERVICE_COMMUNICATION';
+        var remoteMessagePortName = "BG_SERVICE_COMMUNICATION";
         var calleeAppId = 'hlHpt0841o.CONNECTKiosk';
+        var BGserviceId = "hlHpt0841o.SampleBGService";
 
         remoteMsgPort = tizen.messageport.requestRemoteMessagePort(
             calleeAppId,
-            messagePortName
+            remoteMessagePortName
         );
         
         localMsgPort = tizen.messageport.requestLocalMessagePort(messagePortName);
         listenerId = localMsgPort.addMessagePortListener(onMessageReceived);
         
         
-        sendMessage( hosts, "targetIP") // sends the hardcoded Target IP to the frontend
-        sendCommand("started");  // sends the confirmatieno thet the service is started
+        sendMessage( "WEB Started ...") // sends the hardcoded Target IP to the frontend
+        sendCommand("startedWEB");  // sends the confirmatieno thet the service is started
         //runServer();
       
     };
@@ -54,7 +56,7 @@ var messageManager = (function () {
     	  }
     	// Serve the css file (adjust path accordingly if needed)
     	  else if (req.url === '/style.css') {
-    	    var filePath = path.join(__dirname, '..', 'style.css');
+    	    var filePath = path.join(__dirname, '..', './style.css');
     	    fs.readFile(filePath, 'utf8', function(err, data) {
     	      if (err) {
     	        res.writeHead(500, { 'Content-Type': 'text/plain' });
@@ -67,7 +69,7 @@ var messageManager = (function () {
     	  }
     	  // Serve the script.js file (adjust path accordingly if needed)
     	  else if (req.url === '/settings.js') {
-    	    var filePath = path.join(__dirname, '..', 'settings.js');
+    	    var filePath = path.join(__dirname, '..', './settings.js');
     	    fs.readFile(filePath, 'utf8', function(err, data) {
     	      if (err) {
     	        res.writeHead(500, { 'Content-Type': 'text/plain' });
@@ -79,18 +81,18 @@ var messageManager = (function () {
     	    });
     	  }
       	  // Serve the listeners.js file (adjust path accordingly if needed)
-    	  else if (req.url === '/listeners.js') {
-    	    var filePath = path.join(__dirname, '..', 'listeners.js');
-    	    fs.readFile(filePath, 'utf8', function(err, data) {
-    	      if (err) {
-    	        res.writeHead(500, { 'Content-Type': 'text/plain' });
-    	        res.end('Server Error');
-    	        return;
-    	      }
-    	      res.writeHead(200, { 'Content-Type': 'application/javascript' });
-    	      res.end(data);
-    	    });
-    	  }
+    	//   else if (req.url === '/listeners.js') {
+    	//     var filePath = path.join(__dirname, '..', 'listeners.js');
+    	//     fs.readFile(filePath, 'utf8', function(err, data) {
+    	//       if (err) {
+    	//         res.writeHead(500, { 'Content-Type': 'text/plain' });
+    	//         res.end('Server Error');
+    	//         return;
+    	//       }
+    	//       res.writeHead(200, { 'Content-Type': 'application/javascript' });
+    	//       res.end(data);
+    	//     });
+    	//   }
     	  // Handle 404 - File Not Found
     	  else {
     	    res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -100,7 +102,7 @@ var messageManager = (function () {
 
     	// Start the server
    server.listen(3000, function() {
-   	  sendMessage(`Server is running on http://<DEVICE IP>:3000`);
+   	  sendMessage(`WEB - Server is running on http://<DEVICE IP>:3000`);
    	});
     
   
@@ -130,23 +132,29 @@ var messageManager = (function () {
     };
     
     function onMessageReceived(data) {
-        sendMessage('BG service receive data: ' + JSON.stringify(data));
+        sendMessage('WEB service receive data: ' + JSON.stringify(data));
         
         
         
-        if (data[0].key === "myUDP") {
-            sendMessage("myUDP Key received, going to sendUDP with comamand: " + data[0].value);
+        // if (data[0].key === "myUDP") {
+        //     sendMessage("myUDP Key received, going to sendUDP with comamand: " + data[0].value);
 
-            try {
-                // Assuming `hosts` and `portUDP` are defined and valid
-                sendUDP(hosts, portUDP, data[0].value);
-                sendMessage(`UDP message sent successfully to ${hosts}`);
-            } catch (error) {
-                sendMessage("Failed to send UDP message: " + error.message);
-                console.error("UDP sending error: ", error);
-            }
-        }
-        
+        //     try {
+        //         // Assuming `hosts` and `portUDP` are defined and valid
+        //         sendUDP(hosts, portUDP, data[0].value);
+        //         sendMessage(`UDP message sent successfully to ${hosts}`);
+        //     } catch (error) {
+        //         sendMessage("Failed to send UDP message: " + error.message);
+        //         console.error("UDP sending error: ", error);
+        //     }
+        // }
+        if (data[0].key === "targetIP") {
+        	console.log("App received targetIP from Backend: " + data[0].value )
+            targetIP = data[0].value
+            ipTarget.innerText = targetIP
+            remoteMsgPort.sendMessage("WEB received targetIP..." )
+          }
+
         if (data[0].key === "settings") {
             sendMessage("settings Key received, going to overwrite current targetip with: " + data[0].value);
             hosts = data[0].value
@@ -156,29 +164,7 @@ var messageManager = (function () {
         
     };
     
-    function sendUDP(host, port, command) {
-        sendMessage("Invoked sendUDP with: host=" + host + ", port=" + port + ", command=" + command);
-
-        // Create a buffer from the command using the older Buffer constructor
-        var message = new Buffer(command);
-
-        sendMessage("Prepared message buffer: " + message + " with length: " + message.length);
-
-        // Create UDP socket
-        var socket = dgram.createSocket('udp4');
-        
-        sendMessage("Socket created...");
-
-        // Send the UDP message
-        socket.send(message, 0, message.length, port, host, function (err) {
-            if (err) {
-                sendMessage("Error sending UDP message: " + err.message);
-            } else {
-                sendMessage("UDP message sent successfully to " + host + ":" + port);
-            }
-            socket.close();
-        });
-    }
+    
 
     return {
         init: init,
@@ -210,6 +196,6 @@ module.exports.onRequest = function () {
 };
 
 module.exports.onExit = function () {
-    messageManager.sendMessage("Service is exiting... ")
-    messageManager.sendCommand("terminated")
+    messageManager.sendMessage("WEB Service is exiting... ")
+    messageManager.sendCommand("WEB terminated")
 };

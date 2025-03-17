@@ -2,7 +2,7 @@ var serviceId = "hlHpt0841o.SampleBGService";
 var webServiceId = "hlHpt0841o.WebService";
 
 var serviceLaunched = false;
-var webServiceLaunched = false;
+var serviceLaunchedWeb = false;
 var test;
 var temp;
 
@@ -271,16 +271,18 @@ var Printer = {
 
 //Communication with service
 var messageManager = (function () {
+  // PortName to receive messages
   var messagePortName = "BG_SERVICE_COMMUNICATION";
+
   var messagePortNameWEB = "WEB_SERVICE_COMMUNICATION";
-    var remoteMsgPort = undefined;
-    var remoteMsgPortWeb = undefined;
-    var localMsgPort;
-    var watchId;
+  var remoteMsgPort = undefined;
+  var remoteMsgPortWeb = undefined;
+  var localMsgPort;
+  var watchId;
   
     function init() {
         console.log("messageManager.init");
-        
+        // localMsgPort is create to receive messages from other apps.
         
         localMsgPort = tizen.messageport.requestLocalMessagePort(messagePortName);
         watchId = localMsgPort.addMessagePortListener(onMessageReceived);
@@ -293,12 +295,30 @@ var messageManager = (function () {
           serviceId,
           messagePortName
         );
-        remoteMsgPortWeb = tizen.messageport.requestRemoteMessagePort(
-          webServiceId,
-          messagePortNameWEB
-        );
-        //messageManager.runHTTPServer(); // Starting HTTP server
+        
+        // messageManager.runHTTPServer(); // Starting HTTP server
     }
+
+    function connectToRemoteWeb() {
+      console.log("messageManager.connectToRemoteWeb");
+      remoteMsgPortWeb = tizen.messageport.requestRemoteMessagePort(
+        webServiceId,
+        messagePortNameWEB
+      );
+    }
+
+    function sendToWeb(msg, key) {
+        
+      var messageData = {
+        key: key || "broadcast",
+        value: msg || "none",
+      };
+      
+      console.log("messageManager.sendToWeb called with message: " + JSON.stringify(messageData));
+      
+      remoteMsgPortWeb && remoteMsgPortWeb.sendMessage([messageData]);
+  
+  }
 
     function sendTest(msg, key) {
         
@@ -312,6 +332,7 @@ var messageManager = (function () {
         remoteMsgPort && remoteMsgPort.sendMessage([messageData]);
     
     }
+    
     function runHTTPServer(msg) {
       console.log("messageManager.runHTTPServer");
       if (isEmpty(msg)) {
@@ -340,26 +361,31 @@ var messageManager = (function () {
     }
   
     function onMessageReceived(data) {
-      console.log("[onMessageReceived] data: " + JSON.stringify(data));
-      //test.innerHTML += JSON.stringify(data) + "<br/>";
+      console.log("App [onMessageReceived] data: " + JSON.stringify(data));
+        
       if (data[0].value === "started") {
-    	console.log("received Started from Backend")
-        setTimeout( connectToRemote() ,10) ; //due to performance tuning on Tz7.0 and the CPU priority change, function has to be invoked async
-        serviceLaunched = true;
+          console.log("App received Started from Backend")
+            setTimeout( connectToRemote() ,10) ; //due to performance tuning on Tz7.0 and the CPU priority change, function has to be invoked async
+            serviceLaunched = true;
       }
-      
+      if (data[0].value === "startedWEB") {
+        console.log("App received Started from Backend")
+          setTimeout( connectToRemoteWeb() ,10) ; //due to performance tuning on Tz7.0 and the CPU priority change, function has to be invoked async
+          serviceLaunchedWeb = true;
+    }
       if (data[0].key === "targetIP") {
-        	console.log("received targetIP from Backend: " + data[0].value )
+        	console.log("App received targetIP from Backend: " + data[0].value )
             targetIP = data[0].value
             ipTarget.innerText = targetIP
+            setTimeout(() => {sendToWeb("targetIP", data[0].value )}, 15000) // Forwards the IP address to the Web Server backend
           }
       
       if (data[0].key === "currentIP") {
-      	console.log("received currentIP from Backend: " + data[0].value )
+      	console.log("App received currentIP from Backend: " + data[0].value )
           currentIP = data[0].value
         }
       if (data[0].value === "terminated") {
-    	console.log("received terminated from backend ... doing nothing atm...")
+    	console.log("App received terminated from backend ... doing nothing atm...")
         localMsgPort.removeMessagePortListener(watchId);
         serviceLaunched = false;
       }
@@ -379,7 +405,7 @@ var messageManager = (function () {
   //Initialize function
 var init = function () {
       // TODO:: Do your initialization job
-      console.log("init() called");
+      console.log("App init() called");
       
       var comms = ["uno","due","tre", "quattro", "cinque", "sei", "sette","otto","nove","dieci","undici","dodici","tredici"];
       
@@ -527,8 +553,10 @@ var init = function () {
         case 40: //DOWN arrow
           break;
         case 13: //OK button
-                test.innerHTML += "OK Button" + "<br/>";
-                console.log("INFO OK")
+        
+          		title.classList.remove("hidden");
+          		setTimeout(function () {title.classList.add("hidden")}, 20000)
+          	
           break;
         case 10009: //RETURN button
           tizen.application.getCurrentApplication().exit();
