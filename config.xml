@@ -1,36 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns:tizen="http://tizen.org/ns/widgets" xmlns="http://www.w3.org/ns/widgets" id="https://vxtdev.a2016.dev/kiosk/" version="1.0.0" height="1080" width="1920" viewmodes="fullscreen">
+<widget xmlns:tizen="http://tizen.org/ns/widgets" xmlns="http://www.w3.org/ns/widgets"
+    id="https://vxtdev.a2016.dev/kiosk/" version="1.0.0" height="1080" width="1920"
+    viewmodes="fullscreen">
     <access origin="*" subdomains="true"></access>
-    <tizen:application id="hlHpt0841o.CONNECTKiosk" package="hlHpt0841o" required_version="2.3"/>
+    <tizen:application id="hlHpt0841o.CONNECTKiosk"
+        package="hlHpt0841o" required_version="2.3" />
     <author>Thomas</author>
-    <content src="index.html"/>
+    <content
+        src="index.html" />
     <description>MDC sending Frontend for Smart Signage</description>
-    <feature name="http://tizen.org/feature/screen.size.normal.1920.1080"/>
-    <icon src="icon.png"/>
-    <name>MDCController</name>
-    <tizen:privilege name="http://tizen.org/privilege/internet"/>
-    <tizen:privilege name="http://tizen.org/privilege/push"/>
-    <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>
-    <tizen:privilege name="http://developer.samsung.com/privilege/avplay"/>
-    <tizen:privilege name="http://developer.samsung.com/privilege/network.public"/>
-    <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
-    <tizen:privilege name="http://developer.samsung.com/privilege/serialport"/>
-    <tizen:privilege name="http://tizen.org/privilege/tv.audio"/>
-    <tizen:privilege name="http://tizen.org/privilege/filesystem.read"/>
-    <tizen:privilege name="http://tizen.org/privilege/filesystem.write"/>
-    <tizen:privilege name="http://tizen.org/privilege/mediastorage"/>
-    <tizen:privilege name="http://tizen.org/privilege/externalstorage"/>
-    <tizen:privilege name="http://tizen.org/privilege/mediacapture"/>
-    <tizen:privilege name="http://developer.samsung.com/privilege/productinfo"/>
-    <tizen:privilege name="http://developer.samsung.com/privilege/b2bbarcode"/>
-    <tizen:privilege name="http://developer.samsung.com/privilege/microphone"/>
-    <tizen:profile name="tv-samsung"/>
-    <tizen:service id="hlHpt0841o.SampleBGService">
-        <tizen:content src="server/server.js"/>
+    <feature
+        name="http://tizen.org/feature/screen.size.normal.1920.1080" />
+    <icon src="icon.png" />
+    <name>
+    MDCController</name>
+    <tizen:privilege name="http://tizen.org/privilege/internet" />
+    <tizen:privilege
+        name="http://tizen.org/privilege/push" />
+    <tizen:privilege
+        name="http://tizen.org/privilege/tv.inputdevice" />
+    <tizen:privilege
+        name="http://developer.samsung.com/privilege/avplay" />
+    <tizen:privilege
+        name="http://developer.samsung.com/privilege/network.public" />
+    <tizen:privilege
+        name="http://tizen.org/privilege/application.launch" />
+    <tizen:privilege
+        name="http://developer.samsung.com/privilege/serialport" />
+    <tizen:privilege
+        name="http://tizen.org/privilege/tv.audio" />
+    <tizen:privilege
+        name="http://tizen.org/privilege/filesystem.read" />
+    <tizen:privilege
+        name="http://tizen.org/privilege/filesystem.write" />
+    <tizen:privilege
+        name="http://tizen.org/privilege/mediastorage" />
+    <tizen:privilege
+        name="http://tizen.org/privilege/externalstorage" />
+    <tizen:privilege
+        name="http://tizen.org/privilege/mediacapture" />
+    <tizen:privilege
+        name="http://developer.samsung.com/privilege/productinfo" />
+    <tizen:privilege
+        name="http://developer.samsung.com/privilege/b2bbarcode" />
+    <tizen:privilege
+        name="http://developer.samsung.com/privilege/microphone" />
+    <tizen:profile name="tv-samsung" />
+    <tizen:service
+        id="hlHpt0841o.SampleBGService">
+        <tizen:content src="server/server.js" />
         <tizen:name>SampleBGService</tizen:name>
         <tizen:description>Service Application</tizen:description>
-        <tizen:metadata key="meta-key" value="meta-value"/>
-        <tizen:category name="http://tizen.org/category/service"/>
+        <tizen:metadata key="meta-key" value="meta-value" />
+        <tizen:category name="http://tizen.org/category/service" />
     </tizen:service>
-    <tizen:setting screen-orientation="landscape" context-menu="enable" background-support="disable" encryption="disable" install-location="auto" hwkey-event="enable"/>
+
+    <tizen:service
+        id="hlHpt0841o.WebService">
+        <tizen:content src="settings/settings.js" />
+        <tizen:name>WebService</tizen:name>
+        <tizen:description>Service Application</tizen:description>
+        <tizen:metadata key="meta-key" value="meta-value" />
+        <tizen:category name="http://tizen.org/category/service" />
+    </tizen:service>
+    <tizen:setting
+        screen-orientation="landscape" context-menu="enable" background-support="disable"
+        encryption="disable" install-location="auto" hwkey-event="enable" />
 </widget>

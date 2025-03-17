@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css" />
-    
+    <link rel="stylesheet" href="../style.css" />
+
     <title>Settings</title>
     </head>
     <body>
@@ -13,6 +13,23 @@
             <h1>Settings Page</h1>
         </header>
         <section>
+
+            <div class="title" style="color:rgb(0, 0, 0);">
+                <div>
+                Kiosk IP: <p id="myIP">...</p>
+                </div>
+                <div>
+                current Target IP: <p id="targetIP">...</p>
+                </div> 
+                    <form id="myForm">
+                    <label for="userInput">Enter the new Target Device IP address:</label>
+                    <input type="text" id="userInput" name="userInput" placeholder="Type here...">
+                    <button type="submit">Submit</button>
+                    </form>
+                
+                    </div>
+
+
 
             <div class="currentInfos">
                 <p>Buttons Setup</p>

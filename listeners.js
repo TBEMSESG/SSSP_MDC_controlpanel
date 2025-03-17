@@ -1,5 +1,8 @@
 var serviceId = "hlHpt0841o.SampleBGService";
+var webServiceId = "hlHpt0841o.WebService";
+
 var serviceLaunched = false;
+var webServiceLaunched = false;
 var test;
 var temp;
 
@@ -14,7 +17,7 @@ var ipTarget = document.getElementById("targetIP");
 	
 	
 function launchService() {
-    // Launch Service
+    // Launch Service Background
     tizen.application.launchAppControl(
       new tizen.ApplicationControl(
         "http://tizen.org/appcontrol/operation/pick",
@@ -29,6 +32,23 @@ function launchService() {
       },
       function (e) {
         console.log("launchService " + serviceId + " failed: " + e.message);
+      }
+    );
+    // Launch web SErvice for Settings
+    tizen.application.launchAppControl(
+      new tizen.ApplicationControl(
+        "http://tizen.org/appcontrol/operation/pick",
+        null,
+        "image/jpeg",
+        null,
+        [new tizen.ApplicationControlData("caller", ["ForegroundApp", ""])]
+      ),
+      webServiceId,
+      function () {
+        console.log("launchService " + webServiceId + " success");
+      },
+      function (e) {
+        console.log("launchService " + webServiceId + " failed: " + e.message);
       }
     );
   }
@@ -251,8 +271,10 @@ var Printer = {
 
 //Communication with service
 var messageManager = (function () {
-    var messagePortName = "BG_SERVICE_COMMUNICATION";
+  var messagePortName = "BG_SERVICE_COMMUNICATION";
+  var messagePortNameWEB = "WEB_SERVICE_COMMUNICATION";
     var remoteMsgPort = undefined;
+    var remoteMsgPortWeb = undefined;
     var localMsgPort;
     var watchId;
   
@@ -271,8 +293,13 @@ var messageManager = (function () {
           serviceId,
           messagePortName
         );
+        remoteMsgPortWeb = tizen.messageport.requestRemoteMessagePort(
+          webServiceId,
+          messagePortNameWEB
+        );
         //messageManager.runHTTPServer(); // Starting HTTP server
     }
+
     function sendTest(msg, key) {
         
         var messageData = {

@@ -1,0 +1,80 @@
+
+
+{
+
+    "buttonsQty": 8, 
+    "buttonsSettings":{
+        "Button1":{
+            "name":"Power Off",
+            "backgroundColor":"red",
+            "backgroundImage":"",
+            "connectionType":"tcp", 
+            "connectionPort":1515,
+            "connectionTarget":["10.10.1.10"], 
+            "connectionCommand":"AA01XXxxxx"
+        },
+        "Button2":{
+            "name":"Power On",
+            "backgroundColor":"green",
+            "backgroundImage":"",
+            "connectionType":"tcp",
+            "connectionPort":1515,
+            "connectionTarget":["10.10.1.10"],
+            "connectionCommand":"AA01XXxxxx"
+        },
+        "Button3":{
+            "name":"Button 3",
+            "backgroundColor":"blue",
+            "backgroundImage":"",
+            "connectionType":"tcp", 
+            "connectionPort":1515,
+            "connectionTarget":["10.10.1.10"], 
+            "connectionCommand":"AA01XXxxxx"
+        },
+        "Button4":{
+            "name":"Button 4",
+            "backgroundColor":"blue",
+            "backgroundImage":"",
+            "connectionType":"tcp", 
+            "connectionPort":1515,
+            "connectionTarget":["10.10.1.10"], 
+            "connectionCommand":"AA01XXxxxx"
+        },
+        "Button5":{
+            "name":"Button 5",
+            "backgroundColor":"blue",
+            "backgroundImage":"",
+            "connectionType":"tcp", 
+            "connectionPort":1515,
+            "connectionTarget":["10.10.1.10"], 
+            "connectionCommand":"AA01XXxxxx"
+        },
+        "Button6":{
+            "name":"Button 6",
+            "backgroundColor":"blue",
+            "backgroundImage":"",
+            "connectionType":"tcp", 
+            "connectionPort":1515,
+            "connectionTarget":["10.10.1.10"], 
+            "connectionCommand":"AA01XXxxxx"
+        },
+        "Button7":{
+            "name":"Button 7",
+            "backgroundColor":"blue",
+            "backgroundImage":"",
+            "connectionType":"tcp", 
+            "connectionPort":1515,
+            "connectionTarget":["10.10.1.10"], 
+            "connectionCommand":"AA01XXxxxx"
+        },
+        "Button8":{
+            "name":"Button 8",
+            "backgroundColor":"blue",
+            "backgroundImage":"",
+            "connectionType":"tcp", 
+            "connectionPort":1515,
+            "connectionTarget":["10.10.1.10"], 
+            "connectionCommand":"AA01XXxxxx"
+        }
+    }
+}
