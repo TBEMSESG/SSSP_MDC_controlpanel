@@ -460,7 +460,7 @@ var init = function () {
             if (userInput !== "") {
           	  messageManager.sendTest(userInput, "settings");
           	  targetIP = userInput
-          	  ipTarget.innerText = currentIP
+          	  ipTarget.innerText = userInput
             }
             
         });    	

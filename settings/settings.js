@@ -1,6 +1,6 @@
 //var sendMDC = require('./Middleware/sendMdc.js')
 //var sendUDP = sendMDC.sendUDP
-var dgram = require('dgram');
+//var dgram = require('dgram');
 var http = require('http');
 var fs = require('fs');
 var path = require('path');
@@ -56,7 +56,20 @@ var messageManager = (function () {
     	  }
     	// Serve the css file (adjust path accordingly if needed)
     	  else if (req.url === '/style.css') {
-    	    var filePath = path.join(__dirname, '..', './style.css');
+    	    var filePath = path.join(__dirname, '..', 'settings', 'style.css');
+    	    fs.readFile(filePath, 'utf8', function(err, data) {
+    	      if (err) {
+    	        res.writeHead(500, { 'Content-Type': 'text/plain' });
+    	        res.end('Server Error');
+    	        return;
+    	      }
+    	      res.writeHead(200, { 'Content-Type': 'text/css' });
+    	      res.end(data);
+    	    });
+    	  }
+    	  // Serve the script.js file (adjust path accordingly if needed)
+    	  else if (req.url === '/settings.js') {
+    	    var filePath = path.join(__dirname, '..',  'settings','settings.js');
     	    fs.readFile(filePath, 'utf8', function(err, data) {
     	      if (err) {
     	        res.writeHead(500, { 'Content-Type': 'text/plain' });
@@ -64,19 +77,6 @@ var messageManager = (function () {
     	        return;
     	      }
     	      res.writeHead(200, { 'Content-Type': 'application/javascript' });
-    	      res.end(data);
-    	    });
-    	  }
-    	  // Serve the script.js file (adjust path accordingly if needed)
-    	  else if (req.url === '/settings.js') {
-    	    var filePath = path.join(__dirname, '..', './settings.js');
-    	    fs.readFile(filePath, 'utf8', function(err, data) {
-    	      if (err) {
-    	        res.writeHead(500, { 'Content-Type': 'text/plain' });
-    	        res.end('Server Error');
-    	        return;
-    	      }
-    	      res.writeHead(200, { 'Content-Type': 'application/css' });
     	      res.end(data);
     	    });
     	  }
@@ -164,6 +164,30 @@ var messageManager = (function () {
         
     };
     
+    // Listeners
+    //    var title = document.querySelector(".title");
+    //    var ipPlaceholder = document.getElementById("myIP");
+    //    var logoButton = document.querySelector(".logo");
+    //    var button1 = document.querySelector(".item1");
+    //    var button2 = document.querySelector(".item2");
+    //    var button3 = document.querySelector(".item3");
+    //    var button4 = document.querySelector(".item4");
+    //    var button5 = document.querySelector(".item5");
+    //    var button6 = document.querySelector(".item6");
+    //    var button7 = document.querySelector(".item7");
+    //    var button8 = document.querySelector(".item8");
+    //    var button9 = document.querySelector(".item9");
+    //    var button10 = document.querySelector(".item10");
+    //    var button11 = document.querySelector(".item11");
+    //    var button12 = document.querySelector(".item12");
+    //    var button13 = document.querySelector(".item13");
+    // var ipTarget = document.querySelector(".TargetIP");
+    //    var buttons = document.querySelectorAll(".button");
+    
+    // ipPlaceholder.innerText = currentIP || "unknown"    
+    
+    
+    //Following functions are required for background service module
     
 
     return {
@@ -174,10 +198,6 @@ var messageManager = (function () {
 })();
 
 
-
-
-
-//Following functions are required for background service module
 module.exports.onStart = function () {
     messageManager.init();
 };
