@@ -10,7 +10,7 @@
             "backgroundImage":"",
             "connectionType":"tcp", 
             "connectionPort":1515,
-            "connectionTarget":["10.10.1.10"], 
+            "connectionTarget":["10.10.99.150"], 
             "connectionCommand":"AA01XXxxxx"
         },
         "Button2":{
@@ -19,7 +19,7 @@
             "backgroundImage":"",
             "connectionType":"tcp",
             "connectionPort":1515,
-            "connectionTarget":["10.10.1.10"],
+            "connectionTarget":["10.10.99.150"],
             "connectionCommand":"AA01XXxxxx"
         },
         "Button3":{
@@ -28,7 +28,7 @@
             "backgroundImage":"",
             "connectionType":"tcp", 
             "connectionPort":1515,
-            "connectionTarget":["10.10.1.10"], 
+            "connectionTarget":["10.10.99.150"], 
             "connectionCommand":"AA01XXxxxx"
         },
         "Button4":{
@@ -37,7 +37,7 @@
             "backgroundImage":"",
             "connectionType":"tcp", 
             "connectionPort":1515,
-            "connectionTarget":["10.10.1.10"], 
+            "connectionTarget":["10.10.99.150"], 
             "connectionCommand":"AA01XXxxxx"
         },
         "Button5":{
@@ -46,7 +46,7 @@
             "backgroundImage":"",
             "connectionType":"tcp", 
             "connectionPort":1515,
-            "connectionTarget":["10.10.1.10"], 
+            "connectionTarget":["10.10.99.150"], 
             "connectionCommand":"AA01XXxxxx"
         },
         "Button6":{
@@ -55,7 +55,7 @@
             "backgroundImage":"",
             "connectionType":"tcp", 
             "connectionPort":1515,
-            "connectionTarget":["10.10.1.10"], 
+            "connectionTarget":["10.10.99.150"], 
             "connectionCommand":"AA01XXxxxx"
         },
         "Button7":{
@@ -64,7 +64,7 @@
             "backgroundImage":"",
             "connectionType":"tcp", 
             "connectionPort":1515,
-            "connectionTarget":["10.10.1.10"], 
+            "connectionTarget":["10.10.99.150"], 
             "connectionCommand":"AA01XXxxxx"
         },
         "Button8":{
@@ -73,7 +73,7 @@
             "backgroundImage":"",
             "connectionType":"tcp", 
             "connectionPort":1515,
-            "connectionTarget":["10.10.1.10"], 
+            "connectionTarget":["10.10.99.150"], 
             "connectionCommand":"AA01XXxxxx"
         }
     }

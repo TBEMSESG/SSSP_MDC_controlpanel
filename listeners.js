@@ -6,6 +6,86 @@ var serviceLaunchedWeb = false;
 var test;
 var temp;
 
+  // Demo data only test
+var configuration = {
+
+    "buttonsQty": 8, 
+    "buttonsSettings":{
+        "Button1":{
+            "name":"Power Off",
+            "backgroundColor":"red",
+            "backgroundImage":"",
+            "connectionType":"tcp", 
+            "connectionPort":5000,
+            "connectionTarget":["10.10.99.150"], 
+            "connectionCommand":"AA01XXxxxx"
+        },
+        "Button2":{
+            "name":"Power On",
+            "backgroundColor":"green",
+            "backgroundImage":"",
+            "connectionType":"tcp",
+            "connectionPort":5000,
+            "connectionTarget":["10.10.99.150"],
+            "connectionCommand":"AA01XXxxxx"
+        },
+        "Button3":{
+            "name":"Button 3",
+            "backgroundColor":"blue",
+            "backgroundImage":"",
+            "connectionType":"tcp", 
+            "connectionPort":5000,
+            "connectionTarget":["10.10.99.150"], 
+            "connectionCommand":"AA01XXxxxx"
+        },
+        "Button4":{
+            "name":"Button 4",
+            "backgroundColor":"blue",
+            "backgroundImage":"",
+            "connectionType":"tcp", 
+            "connectionPort":5000,
+            "connectionTarget":["10.10.99.150"], 
+            "connectionCommand":"AA01XXxxxx"
+        },
+        "Button5":{
+            "name":"Button 5",
+            "backgroundColor":"blue",
+            "backgroundImage":"",
+            "connectionType":"tcp", 
+            "connectionPort":5000,
+            "connectionTarget":["10.10.99.150"], 
+            "connectionCommand":"AA01XXxxxx"
+        },
+        "Button6":{
+            "name":"Button 6",
+            "backgroundColor":"blue",
+            "backgroundImage":"",
+            "connectionType":"tcp", 
+            "connectionPort":5000,
+            "connectionTarget":["10.10.99.150"], 
+            "connectionCommand":"AA01XXxxxx"
+        },
+        "Button7":{
+            "name":"Button 7",
+            "backgroundColor":"blue",
+            "backgroundImage":"",
+            "connectionType":"tcp", 
+            "connectionPort":5000,
+            "connectionTarget":["10.10.99.150"], 
+            "connectionCommand":"AA01XXxxxx"
+        },
+        "Button8":{
+            "name":"Button 8",
+            "backgroundColor":"blue",
+            "backgroundImage":"",
+            "connectionType":"tcp", 
+            "connectionPort":5000,
+            "connectionTarget":["10.10.99.150"], 
+            "connectionCommand":"AA01XXxxxx"
+        }
+    }
+}
+
 // counter
 var counter = 0
 
@@ -367,6 +447,9 @@ var messageManager = (function () {
           console.log("App received Started from Backend")
             setTimeout( connectToRemote() ,10) ; //due to performance tuning on Tz7.0 and the CPU priority change, function has to be invoked async
             serviceLaunched = true;
+          setTimeout(() =>  writeConfigFirstTime(configuration), 100) ;
+          // setTimeout(() =>  writeConfig(configuration), 120) ;
+          setTimeout(() =>  readConfig(configuration), 500) ;
       }
       if (data[0].value === "startedWEB") {
         console.log("App received Started from Backend")
@@ -390,7 +473,119 @@ var messageManager = (function () {
         serviceLaunched = false;
       }
     }
+
     
+  // Save config Data to Local storage: 
+  // function to write data
+
+  function writeConfigFirstTime() {
+    tizen.filesystem.resolve('documents', function(dir) {
+        var fileExists = false;
+
+        try {
+            var file = dir.resolve('config.json'); // Try resolving the file
+            fileExists = file !== null; // If file is found, mark it as existing
+        } catch (e) {
+            fileExists = false; // If an exception occurs, assume file doesn't exist
+        }
+
+        if (!fileExists) {
+            // Create a new file named 'config.json'
+            var newFile = dir.createFile('config.json');
+            if (newFile) {
+                // Open the file in write mode
+                newFile.openStream('w', function(fileStream) {
+                    // Write the JSON data into the file
+                    fileStream.write(JSON.stringify(configuration));
+                    // Close the file stream
+                    fileStream.close();
+                    // Log success message
+                    console.log('Config file written successfully.');
+                }, function(error) {
+                    console.error('Error opening file stream: ' + error.message);
+                });
+            } else {
+                console.error('File creation failed.');
+            }
+        } else {
+            console.log("Config file already exists... skipping");
+        }
+    }, function(error) {
+        console.error('Error resolving filesystem: ' + error.message);
+    }, 'rw');
+}
+
+function writeConfig(data) {
+  // Resolve the 'documents' directory
+  // fileStream.position = 0
+  
+  tizen.filesystem.resolve('documents', function(dir) {
+      function writeFile() {
+          console.log('Creating new file....');
+          var newFile = dir.createFile('config.json');
+          if (newFile) {
+              // Open the file in write mode ('w' overwrites the file)
+              newFile.openStream('rw', function(fileStream) {
+                  // Write the JSON data into the file
+                  fileStream.write(JSON.stringify(data));
+                  // Close the file stream
+                  fileStream.close();
+                  console.log('File written successfully.');
+              }, function(error) {
+                  console.error('Error opening file stream: ' + error.message);
+              });
+          } else {
+              console.error('File creation failed.');
+          }
+        }
+      function onDelete() {
+          console.log('deletedFile() is successfully done.');
+          writeFile()
+      }
+      try {
+          // Check if the file exists
+          var existingFile = dir.resolve('config.json');
+          if (existingFile) {
+              console.log('Existing config.json found. Deleting...');
+              dir.deleteFile(existingFile.fullPath, onDelete, (err) => {console.log(err)} );
+              return;
+          }
+      } catch (e) {
+          console.log('No existing config.json found. Creating a new one.');
+      }
+
+      // If file doesn't exist, proceed with creating it
+      writeFile();
+  }, function(error) {
+      console.error('Error resolving filesystem: ' + error.message);
+  }, 'rw');
+}
+
+function readConfig() {
+    // Resolve the 'documents' directory
+    tizen.filesystem.resolve('documents', function(dir) {
+      // Retrieve the file object
+      var file = dir.resolve('config.json');
+      if (file) {
+          // Open the file in read mode
+          file.openStream('r', function(fileStream) {
+              // Read the file content
+              var content = fileStream.read(fileStream.bytesAvailable);
+              // Close the file stream
+              fileStream.close();
+              // Log the file content
+              console.log('File content:', JSON.parse(content));
+              sendToWeb(JSON.parse(content))
+          }, function(error) {
+              console.error('Error opening file stream: ' + error.message);
+          });
+      } else {
+          console.error('File not found.');
+      }
+  }, function(error) {
+      console.error('Error resolving filesystem: ' + error.message);
+  }, 'r');
+}
     
   
     return {
@@ -422,9 +617,7 @@ var init = function () {
       //Printer.openSerialPrint();
       // Printer.checkIfPaperInPrinter();
 
- 
-      
-      
+  
       
       
     // Listeners

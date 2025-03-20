@@ -164,6 +164,8 @@ var messageManager = (function () {
         
     };
     
+    
+
     // Listeners
     //    var title = document.querySelector(".title");
     //    var ipPlaceholder = document.getElementById("myIP");

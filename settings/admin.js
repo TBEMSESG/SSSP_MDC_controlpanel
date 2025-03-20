@@ -19,3 +19,10 @@ console.log("File opened for reading");
 var fileContent = fileHandleRead.readString();
 console.log("File content: " + fileContent);
 fileHandleRead.close();
+
+
+function onOpenSuccess(fs) { 
+    /* Write HelloWorld to the file */ fs.write('HelloWorld');
+    /* Move pointer to the beginning */ fs.position = 0;
+    /* Read the file content from the beginning */ fs.read(testFile.fileSize);
+    /* Close the file */ fs.close();}
