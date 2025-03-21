@@ -9,7 +9,7 @@ var path = require('path');
 
 // var hosts = "10.10.99.150"  //to be changed from Frontend settings?
 // var portUDP = 5000;
-
+var config = {}
 
 // Starting the Message Manager between front and backend
 var messageManager = (function () {
@@ -80,20 +80,20 @@ var messageManager = (function () {
     	      res.end(data);
     	    });
     	  }
-      	  // Serve the listeners.js file (adjust path accordingly if needed)
-    	//   else if (req.url === '/listeners.js') {
-    	//     var filePath = path.join(__dirname, '..', 'listeners.js');
-    	//     fs.readFile(filePath, 'utf8', function(err, data) {
-    	//       if (err) {
-    	//         res.writeHead(500, { 'Content-Type': 'text/plain' });
-    	//         res.end('Server Error');
-    	//         return;
-    	//       }
-    	//       res.writeHead(200, { 'Content-Type': 'application/javascript' });
-    	//       res.end(data);
-    	//     });
-    	//   }
-    	  // Handle 404 - File Not Found
+           	  // Serve the script.js file (adjust path accordingly if needed)
+    	  else if (req.url === '/modifications.js') {
+    	    var filePath = path.join(__dirname, '..',  'settings','modifications.js');
+    	    fs.readFile(filePath, 'utf8', function(err, data) {
+    	      if (err) {
+    	        res.writeHead(500, { 'Content-Type': 'text/plain' });
+    	        res.end('Server Error');
+    	        return;
+    	      }
+    	      res.writeHead(200, { 'Content-Type': 'application/javascript' });
+    	      res.end(data);
+    	    });
+    	  }
+ 
     	  else {
     	    res.writeHead(404, { 'Content-Type': 'text/plain' });
     	    res.end('404 Not Found');
@@ -134,20 +134,7 @@ var messageManager = (function () {
     function onMessageReceived(data) {
         sendMessage('WEB service receive data: ' + JSON.stringify(data));
         
-        
-        
-        // if (data[0].key === "myUDP") {
-        //     sendMessage("myUDP Key received, going to sendUDP with comamand: " + data[0].value);
 
-        //     try {
-        //         // Assuming `hosts` and `portUDP` are defined and valid
-        //         sendUDP(hosts, portUDP, data[0].value);
-        //         sendMessage(`UDP message sent successfully to ${hosts}`);
-        //     } catch (error) {
-        //         sendMessage("Failed to send UDP message: " + error.message);
-        //         console.error("UDP sending error: ", error);
-        //     }
-        // }
         if (data[0].key === "targetIP") {
         	console.log("App received targetIP from Backend: " + data[0].value )
             targetIP = data[0].value
@@ -156,15 +143,55 @@ var messageManager = (function () {
           }
 
         if (data[0].key === "settings") {
-            sendMessage("settings Key received, going to overwrite current targetip with: " + data[0].value);
-            hosts = data[0].value
-           
+            sendMessage("WEB settings Key received, updating config object,,,");
+            config=data[0].value
+            renderForm
         }
-        	
-        
     };
     
-    
+    function renderForm() {
+      const container = document.getElementById('buttonsContainer');
+      container.innerHTML = '';
+      
+      Object.keys(config.buttonsSettings).slice(0, config.buttonsQty).forEach(buttonKey => {
+          const button = config.buttonsSettings[buttonKey];
+          
+          const div = document.createElement('div');
+          div.className = 'button-container';
+          div.innerHTML = `
+              <h3>${buttonKey}</h3>
+              <label>Name: <input type="text" name="${buttonKey}-name" value="${button.name}"></label><br>
+              <label>Background Color: <input type="color" name="${buttonKey}-backgroundColor" value="${button.backgroundColor}"></label><br>
+              <label>Connection Type: 
+                  <select name="${buttonKey}-connectionType">
+                      <option value="tcp" ${button.connectionType === "tcp" ? "selected" : ""}>TCP</option>
+                      <option value="udp" ${button.connectionType === "udp" ? "selected" : ""}>UDP</option>
+                  </select>
+              </label><br>
+              <label>Connection Port: <input type="number" name="${buttonKey}-connectionPort" value="${button.connectionPort}"></label><br>
+              <label>Connection Target: <input type="text" name="${buttonKey}-connectionTarget" value="${button.connectionTarget.join(',')}"></label><br>
+              <label>Connection Command: <input type="text" name="${buttonKey}-connectionCommand" value="${button.connectionCommand}"></label><br>
+          `;
+          container.appendChild(div);
+      });
+  }
+
+
+//   document.getElementById('configForm').addEventListener('submit', function(event) {
+//     event.preventDefault();
+//     const formData = new FormData(event.target);
+//     config.buttonsQty = Number(formData.get("buttonsQty"));
+//     Object.keys(config.buttonsSettings).slice(0, config.buttonsQty).forEach(buttonKey => {
+//         config.buttonsSettings[buttonKey].name = formData.get(`${buttonKey}-name`);
+//         config.buttonsSettings[buttonKey].backgroundColor = formData.get(`${buttonKey}-backgroundColor`);
+//         config.buttonsSettings[buttonKey].connectionType = formData.get(`${buttonKey}-connectionType`);
+//         config.buttonsSettings[buttonKey].connectionPort = Number(formData.get(`${buttonKey}-connectionPort`));
+//         config.buttonsSettings[buttonKey].connectionTarget = formData.get(`${buttonKey}-connectionTarget`).split(',');
+//         config.buttonsSettings[buttonKey].connectionCommand = formData.get(`${buttonKey}-connectionCommand`);
+//     });
+//     console.log('Updated Config:', config);
+//     alert('Configuration updated! Check the console for details.');
+// });
 
     // Listeners
     //    var title = document.querySelector(".title");
@@ -200,8 +227,10 @@ var messageManager = (function () {
 })();
 
 
+
 module.exports.onStart = function () {
     messageManager.init();
+    
 };
 
 module.exports.onRequest = function () {

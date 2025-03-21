@@ -7,13 +7,13 @@ var test;
 var temp;
 
   // Demo data only test
-var configuration = {
+var configurationZero = {
 
     "buttonsQty": 8, 
     "buttonsSettings":{
         "Button1":{
-            "name":"Power Off",
-            "backgroundColor":"red",
+            "name":"Button 1",
+            "backgroundColor":"blue",
             "backgroundImage":"",
             "connectionType":"tcp", 
             "connectionPort":5000,
@@ -21,8 +21,8 @@ var configuration = {
             "connectionCommand":"AA01XXxxxx"
         },
         "Button2":{
-            "name":"Power On",
-            "backgroundColor":"green",
+            "name":"Button 2",
+            "backgroundColor":"blue",
             "backgroundImage":"",
             "connectionType":"tcp",
             "connectionPort":5000,
@@ -82,9 +82,29 @@ var configuration = {
             "connectionPort":5000,
             "connectionTarget":["10.10.99.150"], 
             "connectionCommand":"AA01XXxxxx"
-        }
+        },
+        "Button9":{
+          "name":"Button 9",
+          "backgroundColor":"blue",
+          "backgroundImage":"",
+          "connectionType":"tcp", 
+          "connectionPort":5000,
+          "connectionTarget":["10.10.99.150"], 
+          "connectionCommand":"AA01XXxxxx"
+      },
+      "Button10":{
+        "name":"Button 10",
+        "backgroundColor":"blue",
+        "backgroundImage":"",
+        "connectionType":"tcp", 
+        "connectionPort":5000,
+        "connectionTarget":["10.10.99.150"], 
+        "connectionCommand":"AA01XXxxxx"
+    }
     }
 }
+var configuration = {}
+
 
 // counter
 var counter = 0
@@ -496,7 +516,7 @@ var messageManager = (function () {
                 // Open the file in write mode
                 newFile.openStream('w', function(fileStream) {
                     // Write the JSON data into the file
-                    fileStream.write(JSON.stringify(configuration));
+                    fileStream.write(JSON.stringify(configurationZero));
                     // Close the file stream
                     fileStream.close();
                     // Log success message
@@ -575,7 +595,9 @@ function readConfig() {
               fileStream.close();
               // Log the file content
               console.log('File content:', JSON.parse(content));
-              sendToWeb(JSON.parse(content))
+              configuration = JSON.parse(content)
+              sendToWeb(configuration, "settings")
+              sendTest(configuration, "settings")
           }, function(error) {
               console.error('Error opening file stream: ' + error.message);
           });
@@ -634,11 +656,26 @@ var init = function () {
     var button8 = document.querySelector(".item8");
     var button9 = document.querySelector(".item9");
     var button10 = document.querySelector(".item10");
-    var button11 = document.querySelector(".item11");
-    var button12 = document.querySelector(".item12");
-    var button13 = document.querySelector(".item13");
+   
 
     var buttons = document.querySelectorAll(".button");
+  
+  
+    function updateButtons() {
+      Object.keys(configurationZero.buttonsSettings).forEach((buttonKey, index) => {
+          let buttonClass = `.item${index + 1}`;
+          let buttonElement = document.querySelector(buttonClass);
+
+          if (buttonElement) {
+            console.log(`Updating frontpage : Text is: ${configurationZero.buttonsSettings[buttonKey].name}`)
+              buttonElement.querySelector("p").textContent = configurationZero.buttonsSettings[buttonKey].name;
+              buttonElement.style.backgroundColor = configurationZero.buttonsSettings[buttonKey].backgroundColor;
+              buttonElement.style.backgroundImage = configurationZero.buttonsSettings[buttonKey].backgroundImage;
+          }
+      });
+  }
+
+  updateButtons();
 
     ipPlaceholder.innerText = currentIP || "unknown"    
     	
@@ -655,29 +692,9 @@ var init = function () {
           	  targetIP = userInput
           	  ipTarget.innerText = userInput
             }
-            
         });    	
     	
-    // Check for logoclicks to open settings info 
-    // by clicking the logo fast 7 times, a small settings page opens to change the target IP address for the UDP commands
-    
-    // logoButton.addEventListener("click", function () {
-    	
-    // 	console.log("counting ..." + counter);
-    // 	if (counter < 7){
-    // 		setTimeout( function () {counter = 0} , 3000 ) 
 
-    // 		counter ++
-    // 	}
-    // 	if (counter === 7) {
-    // 		title.classList.remove("hidden");
-    // 		setTimeout(function () {title.classList.add("hidden")}, 20000)
-    // 		counter = 0
-    // 	}
-    	
-    // }		 
-    // )
-    
   	
     		
 	
