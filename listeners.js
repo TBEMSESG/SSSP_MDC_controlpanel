@@ -15,19 +15,19 @@ var configurationZero = {
             "name":"Button 1",
             "backgroundColor":"blue",
             "backgroundImage":"",
-            "connectionType":"tcp", 
+            "connectionType":"udp", 
             "connectionPort":5000,
             "connectionTarget":["10.10.99.150"], 
-            "connectionCommand":"AA01XXxxxx"
+            "connectionCommand":"uno"
         },
         "Button2":{
             "name":"Button 2",
             "backgroundColor":"blue",
             "backgroundImage":"",
-            "connectionType":"tcp",
+            "connectionType":"udp",
             "connectionPort":5000,
             "connectionTarget":["10.10.99.150"],
-            "connectionCommand":"AA01XXxxxx"
+            "connectionCommand":"due"
         },
         "Button3":{
             "name":"Button 3",
@@ -427,7 +427,7 @@ var messageManager = (function () {
           value: msg || "none",
         };
         
-        console.log("messageManager.sendTest called with message: " + JSON.stringify(messageData));
+        console.log("Frontend messageManager.sendTest called with message: " + JSON.stringify(messageData));
         
         remoteMsgPort && remoteMsgPort.sendMessage([messageData]);
     
@@ -467,8 +467,8 @@ var messageManager = (function () {
           console.log("App received Started from Backend")
             setTimeout( connectToRemote() ,10) ; //due to performance tuning on Tz7.0 and the CPU priority change, function has to be invoked async
             serviceLaunched = true;
-          setTimeout(() =>  writeConfigFirstTime(configuration), 100) ;
-          // setTimeout(() =>  writeConfig(configuration), 120) ;
+          setTimeout(() =>  writeConfigFirstTime(configurationZero), 100) ;
+          // setTimeout(() =>  writeConfig(configurationZero), 300) ;
           setTimeout(() =>  readConfig(configuration), 500) ;
       }
       if (data[0].value === "startedWEB") {
@@ -480,7 +480,7 @@ var messageManager = (function () {
         	console.log("App received targetIP from Backend: " + data[0].value )
             targetIP = data[0].value
             ipTarget.innerText = targetIP
-            setTimeout(() => {sendToWeb("targetIP", data[0].value )}, 15000) // Forwards the IP address to the Web Server backend
+            // setTimeout(() => {sendToWeb("targetIP", data[0].value )}, 15000) // Forwards the IP address to the Web Server backend
           }
       
       if (data[0].key === "currentIP") {
@@ -596,8 +596,8 @@ function readConfig() {
               // Log the file content
               console.log('File content:', JSON.parse(content));
               configuration = JSON.parse(content)
-              sendToWeb(configuration, "settings")
-              sendTest(configuration, "settings")
+              sendToWeb(JSON.stringify(configuration), "settings")
+              sendTest(JSON.stringify(configuration), "settings")
           }, function(error) {
               console.error('Error opening file stream: ' + error.message);
           });
@@ -667,7 +667,7 @@ var init = function () {
           let buttonElement = document.querySelector(buttonClass);
 
           if (buttonElement) {
-            console.log(`Updating frontpage : Text is: ${configurationZero.buttonsSettings[buttonKey].name}`)
+            // console.log(`Updating frontpage : Text is: ${configurationZero.buttonsSettings[buttonKey].name}`)
               buttonElement.querySelector("p").textContent = configurationZero.buttonsSettings[buttonKey].name;
               buttonElement.style.backgroundColor = configurationZero.buttonsSettings[buttonKey].backgroundColor;
               buttonElement.style.backgroundImage = configurationZero.buttonsSettings[buttonKey].backgroundImage;
@@ -705,15 +705,17 @@ var init = function () {
       
       //modal.style.display = "block";
       //modal.classList.add("fold-class");
-      messageManager.sendTest(comms[0], "myUDP");
+      messageManager.sendTest(JSON.stringify(configuration.buttonsSettings.Button1), "myUDP");
     
     });
+
+
     button2.addEventListener('click', function () {
       
       
       //modal.style.display = "block";
       //modal.classList.add("fold-class");
-      messageManager.sendTest(comms[1], "myUDP");
+      messageManager.sendTest(JSON.stringify(configuration.buttonsSettings.Button2), "myUDP");
     
     });
     button3.addEventListener('click',  function () {
@@ -721,28 +723,35 @@ var init = function () {
   
   //modal.style.display = "block";
   //modal.classList.add("fold-class");
-  messageManager.sendTest(comms[2], "myUDP");
+  messageManager.sendTest(JSON.stringify(configuration.buttonsSettings.Button3), "myUDP");
 
 });
-    button4.addEventListener('click', function () { messageManager.sendTest(comms[3], "myUDP");
+    button4.addEventListener('click', function () {       messageManager.sendTest(JSON.stringify(configuration.buttonsSettings.Button4), "myUDP");
+
 
     });
-    button5.addEventListener('click', function () { messageManager.sendTest(comms[4], "myUDP");
+    button5.addEventListener('click', function () {       messageManager.sendTest(JSON.stringify(configuration.buttonsSettings.Button5), "myUDP");
+
 
     });
-    button6.addEventListener('click', function () { messageManager.sendTest(comms[5], "myUDP");
+    button6.addEventListener('click', function () {       messageManager.sendTest(JSON.stringify(configuration.buttonsSettings.Button6), "myUDP");
+
 
     });
-    button7.addEventListener('click', function () { messageManager.sendTest(comms[6], "myUDP");
+    button7.addEventListener('click', function () {       messageManager.sendTest(JSON.stringify(configuration.buttonsSettings.Button7), "myUDP");
+
 
     });
-    button8.addEventListener('click', function () { messageManager.sendTest(comms[7], "myUDP");
+    button8.addEventListener('click', function () {       messageManager.sendTest(JSON.stringify(configuration.buttonsSettings.Button8), "myUDP");
+
 
     });
-    button9.addEventListener('click', function () { messageManager.sendTest(comms[8], "myUDP");
+    button9.addEventListener('click', function () {       messageManager.sendTest(JSON.stringify(configuration.buttonsSettings.Button9), "myUDP");
+
 
     });
-    button10.addEventListener('click', function () { messageManager.sendTest(comms[9], "myUDP");
+    button10.addEventListener('click', function () {       messageManager.sendTest(JSON.stringify(configuration.buttonsSettings.Button10), "myUDP");
+
 
     });
     // button11.addEventListener('click', function () { messageManager.sendTest(comms[10], "myUDP");

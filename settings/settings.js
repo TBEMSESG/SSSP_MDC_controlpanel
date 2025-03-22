@@ -7,17 +7,15 @@ var path = require('path');
 
 // Env settings
 
-// var hosts = "10.10.99.150"  //to be changed from Frontend settings?
-// var portUDP = 5000;
 var config = {}
 
 // Starting the Message Manager between front and backend
 var messageManager = (function () {
- 
+
     var localMsgPort;
     var remoteMsgPort;
     var listenerId;
-    
+
     function init () {
         var messagePortName = 'WEB_SERVICE_COMMUNICATION';
         var remoteMessagePortName = "BG_SERVICE_COMMUNICATION";
@@ -28,15 +26,15 @@ var messageManager = (function () {
             calleeAppId,
             remoteMessagePortName
         );
-        
+
         localMsgPort = tizen.messageport.requestLocalMessagePort(messagePortName);
         listenerId = localMsgPort.addMessagePortListener(onMessageReceived);
-        
-        
-        sendMessage( "WEB Started ...") // sends the hardcoded Target IP to the frontend
+
+
+        sendMessage("WEB Started ...") // sends the hardcoded Target IP to the frontend
         sendCommand("startedWEB");  // sends the confirmatieno thet the service is started
         //runServer();
-      
+
     };
 
     //Create webserver for settings
@@ -80,20 +78,41 @@ var messageManager = (function () {
     	      res.end(data);
     	    });
     	  }
-           	  // Serve the script.js file (adjust path accordingly if needed)
-    	  else if (req.url === '/modifications.js') {
-    	    var filePath = path.join(__dirname, '..',  'settings','modifications.js');
-    	    fs.readFile(filePath, 'utf8', function(err, data) {
-    	      if (err) {
-    	        res.writeHead(500, { 'Content-Type': 'text/plain' });
-    	        res.end('Server Error');
-    	        return;
-    	      }
-    	      res.writeHead(200, { 'Content-Type': 'application/javascript' });
-    	      res.end(data);
-    	    });
+
+        else if (req.url === '/config' && req.method === 'GET') {
+
+    	      res.writeHead(200, { 'Content-Type': 'application/json' });
+    	      res.end(JSON.stringify(config));
+
     	  }
- 
+
+        else if (req.url === '/saveConfig' && req.method === 'POST') {
+          var body = '';
+
+          req.on('data', chunk => {
+              body += chunk;
+          });
+
+          req.on('end', () => {
+
+              try {
+                  const newConfig = JSON.parse(body);
+                  config = newConfig;
+                  sendMessage(`WEB - received new config from SettingsPage: ${JSON.stringify(config)} `);
+
+                  // Respond with success
+                  res.writeHead(200, { 'Content-Type': 'text/plain' });
+                  res.end('Config updated successfully');
+
+              } catch (e) {
+                  res.writeHead(400, { 'Content-Type': 'text/plain' });
+                  res.end('Invalid JSON');
+              }
+          });
+
+      }
+
+
     	  else {
     	    res.writeHead(404, { 'Content-Type': 'text/plain' });
     	    res.end('404 Not Found');
@@ -102,12 +121,12 @@ var messageManager = (function () {
 
     	// Start the server
    server.listen(3000, function() {
-   	  sendMessage(`WEB - Server is running on http://<DEVICE IP>:3000`);
+   	  sendMessage(`🌐 WEB - Server is running on http://<DEVICE IP>:3000`);
    	});
-    
-  
-    
-    
+
+
+
+
     function sendCommand (msg) {
         // send command to Foreground app, like started and terminated
         var messageData = {
@@ -126,14 +145,14 @@ var messageManager = (function () {
         remoteMsgPort.sendMessage([messageData]);
     };
 
-    
+
     function close () {
         localMsgPort.removeMessagePortListener(listenerId);
     };
-    
+
     function onMessageReceived(data) {
         sendMessage('WEB service receive data: ' + JSON.stringify(data));
-        
+
 
         if (data[0].key === "targetIP") {
         	console.log("App received targetIP from Backend: " + data[0].value )
@@ -144,37 +163,23 @@ var messageManager = (function () {
 
         if (data[0].key === "settings") {
             sendMessage("WEB settings Key received, updating config object,,,");
-            config=data[0].value
-            renderForm
-        }
+
+            //my way
+            var value = JSON.parse(data[0].value)
+            config = value
+
+
+            // // chatgpt way
+            // var parsedData = JSON.parse(data);
+            // // Now parse the inner value string to convert it into a proper object
+            // var config = JSON.parse(parsedData[0].value);
+
+
+            sendMessage("WEB settings Key received, updating config object... number of buttons: " + config.buttonsQty);
+
+          }
     };
-    
-    function renderForm() {
-      const container = document.getElementById('buttonsContainer');
-      container.innerHTML = '';
-      
-      Object.keys(config.buttonsSettings).slice(0, config.buttonsQty).forEach(buttonKey => {
-          const button = config.buttonsSettings[buttonKey];
-          
-          const div = document.createElement('div');
-          div.className = 'button-container';
-          div.innerHTML = `
-              <h3>${buttonKey}</h3>
-              <label>Name: <input type="text" name="${buttonKey}-name" value="${button.name}"></label><br>
-              <label>Background Color: <input type="color" name="${buttonKey}-backgroundColor" value="${button.backgroundColor}"></label><br>
-              <label>Connection Type: 
-                  <select name="${buttonKey}-connectionType">
-                      <option value="tcp" ${button.connectionType === "tcp" ? "selected" : ""}>TCP</option>
-                      <option value="udp" ${button.connectionType === "udp" ? "selected" : ""}>UDP</option>
-                  </select>
-              </label><br>
-              <label>Connection Port: <input type="number" name="${buttonKey}-connectionPort" value="${button.connectionPort}"></label><br>
-              <label>Connection Target: <input type="text" name="${buttonKey}-connectionTarget" value="${button.connectionTarget.join(',')}"></label><br>
-              <label>Connection Command: <input type="text" name="${buttonKey}-connectionCommand" value="${button.connectionCommand}"></label><br>
-          `;
-          container.appendChild(div);
-      });
-  }
+
 
 
 //   document.getElementById('configForm').addEventListener('submit', function(event) {
@@ -193,31 +198,31 @@ var messageManager = (function () {
 //     alert('Configuration updated! Check the console for details.');
 // });
 
-    // Listeners
-    //    var title = document.querySelector(".title");
-    //    var ipPlaceholder = document.getElementById("myIP");
-    //    var logoButton = document.querySelector(".logo");
-    //    var button1 = document.querySelector(".item1");
-    //    var button2 = document.querySelector(".item2");
-    //    var button3 = document.querySelector(".item3");
-    //    var button4 = document.querySelector(".item4");
-    //    var button5 = document.querySelector(".item5");
-    //    var button6 = document.querySelector(".item6");
-    //    var button7 = document.querySelector(".item7");
-    //    var button8 = document.querySelector(".item8");
-    //    var button9 = document.querySelector(".item9");
-    //    var button10 = document.querySelector(".item10");
-    //    var button11 = document.querySelector(".item11");
-    //    var button12 = document.querySelector(".item12");
-    //    var button13 = document.querySelector(".item13");
-    // var ipTarget = document.querySelector(".TargetIP");
-    //    var buttons = document.querySelectorAll(".button");
-    
-    // ipPlaceholder.innerText = currentIP || "unknown"    
-    
-    
+//     Listeners
+//        var title = document.querySelector(".title");
+//        var ipPlaceholder = document.getElementById("myIP");
+//        var logoButton = document.querySelector(".logo");
+//        var button1 = document.querySelector(".item1");
+//        var button2 = document.querySelector(".item2");
+//        var button3 = document.querySelector(".item3");
+//        var button4 = document.querySelector(".item4");
+//        var button5 = document.querySelector(".item5");
+//        var button6 = document.querySelector(".item6");
+//        var button7 = document.querySelector(".item7");
+//        var button8 = document.querySelector(".item8");
+//        var button9 = document.querySelector(".item9");
+//        var button10 = document.querySelector(".item10");
+//        var button11 = document.querySelector(".item11");
+//        var button12 = document.querySelector(".item12");
+//        var button13 = document.querySelector(".item13");
+//     var ipTarget = document.querySelector(".TargetIP");
+//        var buttons = document.querySelectorAll(".button");
+
+//     ipPlaceholder.innerText = currentIP || "unknown"
+
+
     //Following functions are required for background service module
-    
+
 
     return {
         init: init,
@@ -230,7 +235,7 @@ var messageManager = (function () {
 
 module.exports.onStart = function () {
     messageManager.init();
-    
+
 };
 
 module.exports.onRequest = function () {

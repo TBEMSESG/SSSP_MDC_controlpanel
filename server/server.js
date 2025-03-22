@@ -10,6 +10,7 @@ var path = require('path');
 var hosts = "10.10.99.150"  //to be changed from Frontend settings?
 var portUDP = 5000;
 
+var configuration = {}
 
 // Starting the Message Manager between front and backend
 var messageManager = (function () {
@@ -41,74 +42,6 @@ var messageManager = (function () {
         //runServer();
       
     };
-
-  //   //Create webserver for settings
-  //   var server = http.createServer(function(req, res) {
-  //   	  // Serve the index.html file
-  //   	  if (req.url === '/') {
-  //   	    var filePath = path.join(__dirname, '..' , 'settings', 'settings.html');
-  //   	    fs.readFile(filePath, 'utf8', function(err, data) {
-  //   	      if (err) {
-  //   	        res.writeHead(500, { 'Content-Type': 'text/plain' });
-  //   	        res.end('Server Error' + err);
-  //   	        return;
-  //   	      }
-  //   	      res.writeHead(200, { 'Content-Type': 'text/html' });
-  //   	      res.end(data);
-  //   	    });
-  //   	  }
-  //   	// Serve the css file (adjust path accordingly if needed)
-  //   	  else if (req.url === '/style.css') {
-  //   	    var filePath = path.join(__dirname, '..', 'style.css');
-  //   	    fs.readFile(filePath, 'utf8', function(err, data) {
-  //   	      if (err) {
-  //   	        res.writeHead(500, { 'Content-Type': 'text/plain' });
-  //   	        res.end('Server Error');
-  //   	        return;
-  //   	      }
-  //   	      res.writeHead(200, { 'Content-Type': 'application/javascript' });
-  //   	      res.end(data);
-  //   	    });
-  //   	  }
-  //   	  // Serve the script.js file (adjust path accordingly if needed)
-  //   	  else if (req.url === '/settings.js') {
-  //   	    var filePath = path.join(__dirname, '..', 'settings.js');
-  //   	    fs.readFile(filePath, 'utf8', function(err, data) {
-  //   	      if (err) {
-  //   	        res.writeHead(500, { 'Content-Type': 'text/plain' });
-  //   	        res.end('Server Error');
-  //   	        return;
-  //   	      }
-  //   	      res.writeHead(200, { 'Content-Type': 'application/css' });
-  //   	      res.end(data);
-  //   	    });
-  //   	  }
-  //     	  // Serve the listeners.js file (adjust path accordingly if needed)
-  //   	  else if (req.url === '/listeners.js') {
-  //   	    var filePath = path.join(__dirname, '..', 'listeners.js');
-  //   	    fs.readFile(filePath, 'utf8', function(err, data) {
-  //   	      if (err) {
-  //   	        res.writeHead(500, { 'Content-Type': 'text/plain' });
-  //   	        res.end('Server Error');
-  //   	        return;
-  //   	      }
-  //   	      res.writeHead(200, { 'Content-Type': 'application/javascript' });
-  //   	      res.end(data);
-  //   	    });
-  //   	  }
-  //   	  // Handle 404 - File Not Found
-  //   	  else {
-  //   	    res.writeHead(404, { 'Content-Type': 'text/plain' });
-  //   	    res.end('404 Not Found');
-  //   	  }
-  //   	});
-
-  //   	// Start the server
-  //  server.listen(3000, function() {
-  //  	  sendMessage(`Server is running on http://<DEVICE IP>:3000`);
-  //  	});
-    
-  
     
     
     function sendCommand (msg) {
@@ -135,22 +68,30 @@ var messageManager = (function () {
     };
     
     function onMessageReceived(data) {
+        
         sendMessage('BG service receive data: ' + JSON.stringify(data));
+        var value = JSON.parse(data[0].value)
+        
+        sendMessage('BG service received extrapolated value ' + value)
+        
         
         if (data[0].key === "myUDP") {
-                sendMessage("myUDP Key received, going to sendUDP with comamand: " + data[0].value);
+                sendMessage("myUDP Key received, going to sendUDP with comamand: " + value.connectionCommand);
                 try {
                     // Assuming `hosts` and `portUDP` are defined and valid
-                    sendUDP(hosts, portUDP, data[0].value);
-                    sendMessage(`UDP message sent successfully to ${hosts}`);
+                    // atm, only one 
+                    sendUDP(value.connectionTarget[0], value.connectionPort, value.connectionCommand);
+                    sendMessage(`UDP message sent successfully to ${value.connectionTarget[0]}`);
                 } catch (error) {
                     sendMessage("Failed to send UDP message: " + error.message);
                     console.error("UDP sending error: ", error);
                 }
             }
+        
+        //update config file
         if (data[0].key === "settings") {
-            sendMessage(" Background settings Key received, going to overwrite current targetip with: " + data[0].value);
-            hosts = data[0].value
+            sendMessage(" Background settings Key received, going to overwrite configuration with: " + data[0].value);
+            configuration = data[0].value
            
         }        
     };
@@ -167,6 +108,8 @@ var messageManager = (function () {
         var socket = dgram.createSocket('udp4');
         
         sendMessage("BG - Socket created...");
+
+        // to be added : host is array, create a for loop to sen to multi targets
 
         // Send the UDP message
         socket.send(message, 0, message.length, port, host, function (err) {
