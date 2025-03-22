@@ -14,18 +14,22 @@
         </header>
         <section>
                 <p>This Page allows for changing Button settings on the device. All modifications are saved directly on the device and are
-                persistent as long as the app is installed. You can reboot the device freely, data persist. 
+                persistent as long as the app is installed. You can reboot the device freely, data persist. <br>
+                TCP connections will follow shortly. At the moment, only UDP (Event Triggers can be sent)
                 </p>
 
 
         </section>
         <h2>Button Configuration Editor</h2>
+        
+        <div id="naja">
         <form id="configForm">
             
+            <button type="submit">Save Changes</button>
             <div id="buttonsContainer">This is the place for the container</div>
             <button type="submit">Save Changes</button>
         </form>
-   
+    </div>
    <script>
 
       var container = document.getElementById('buttonsContainer');
@@ -40,6 +44,7 @@
 
                 // Example: Update buttons dynamically
             Object.keys(config.buttonsSettings).forEach(buttonKey => {
+                
                 const button = config.buttonsSettings[buttonKey];
                 
                 const div = document.createElement('div');
@@ -50,7 +55,7 @@
                     <label>Background Color: <input type="color" name="${buttonKey}-backgroundColor" value="${button.backgroundColor}"></label><br>
                     <label>Connection Type: 
                         <select name="${buttonKey}-connectionType">
-                            <option value="tcp" ${button.connectionType === "tcp" ? "selected" : ""}>TCP</option>
+                            <!--  <option value="tcp" ${button.connectionType === "tcp" ? "selected" : ""}>TCP</option> -->
                             <option value="udp" ${button.connectionType === "udp" ? "selected" : ""}>UDP</option>
                         </select>
                     </label><br>

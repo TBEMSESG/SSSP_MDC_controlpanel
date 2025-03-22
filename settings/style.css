@@ -7,3 +7,24 @@ header {
     color: white;
     font-size: xx-large;
 }
+
+#buttonsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+.button-container {
+    border: 1px solid #ccc;
+    /* padding: 12px; */
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    /* display: flex;
+    flex-direction: column; */
+    /* gap: 8px; */
+    min-width: 300px;
+    max-width: 400px;
+    flex: 1 1 auto; /* allow flexible width */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}

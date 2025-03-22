@@ -98,7 +98,11 @@ var messageManager = (function () {
               try {
                   const newConfig = JSON.parse(body);
                   config = newConfig;
-                  sendMessage(`WEB - received new config from SettingsPage: ${JSON.stringify(config)} `);
+                  // sendMessage(`WEB - received new config from SettingsPage: ${JSON.stringify(config)} `);
+                  sendMessage(`WEB - sending update config to Frontend... `);
+
+                  sendMessage( JSON.stringify(config) , "update" );
+
 
                   // Respond with success
                   res.writeHead(200, { 'Content-Type': 'text/plain' });
@@ -151,7 +155,7 @@ var messageManager = (function () {
     };
 
     function onMessageReceived(data) {
-        sendMessage('WEB service receive data: ' + JSON.stringify(data));
+        // sendMessage('WEB service receive data: ' + JSON.stringify(data));
 
 
         if (data[0].key === "targetIP") {
@@ -162,67 +166,18 @@ var messageManager = (function () {
           }
 
         if (data[0].key === "settings") {
-            sendMessage("WEB settings Key received, updating config object,,,");
+            sendMessage("WEB settings Key received, updating config object...");
 
             //my way
             var value = JSON.parse(data[0].value)
             config = value
 
 
-            // // chatgpt way
-            // var parsedData = JSON.parse(data);
-            // // Now parse the inner value string to convert it into a proper object
-            // var config = JSON.parse(parsedData[0].value);
 
-
-            sendMessage("WEB settings Key received, updating config object... number of buttons: " + config.buttonsQty);
+         //   sendMessage("WEB settings Key received, updating config object... number of buttons: " + config.buttonsQty);
 
           }
     };
-
-
-
-//   document.getElementById('configForm').addEventListener('submit', function(event) {
-//     event.preventDefault();
-//     const formData = new FormData(event.target);
-//     config.buttonsQty = Number(formData.get("buttonsQty"));
-//     Object.keys(config.buttonsSettings).slice(0, config.buttonsQty).forEach(buttonKey => {
-//         config.buttonsSettings[buttonKey].name = formData.get(`${buttonKey}-name`);
-//         config.buttonsSettings[buttonKey].backgroundColor = formData.get(`${buttonKey}-backgroundColor`);
-//         config.buttonsSettings[buttonKey].connectionType = formData.get(`${buttonKey}-connectionType`);
-//         config.buttonsSettings[buttonKey].connectionPort = Number(formData.get(`${buttonKey}-connectionPort`));
-//         config.buttonsSettings[buttonKey].connectionTarget = formData.get(`${buttonKey}-connectionTarget`).split(',');
-//         config.buttonsSettings[buttonKey].connectionCommand = formData.get(`${buttonKey}-connectionCommand`);
-//     });
-//     console.log('Updated Config:', config);
-//     alert('Configuration updated! Check the console for details.');
-// });
-
-//     Listeners
-//        var title = document.querySelector(".title");
-//        var ipPlaceholder = document.getElementById("myIP");
-//        var logoButton = document.querySelector(".logo");
-//        var button1 = document.querySelector(".item1");
-//        var button2 = document.querySelector(".item2");
-//        var button3 = document.querySelector(".item3");
-//        var button4 = document.querySelector(".item4");
-//        var button5 = document.querySelector(".item5");
-//        var button6 = document.querySelector(".item6");
-//        var button7 = document.querySelector(".item7");
-//        var button8 = document.querySelector(".item8");
-//        var button9 = document.querySelector(".item9");
-//        var button10 = document.querySelector(".item10");
-//        var button11 = document.querySelector(".item11");
-//        var button12 = document.querySelector(".item12");
-//        var button13 = document.querySelector(".item13");
-//     var ipTarget = document.querySelector(".TargetIP");
-//        var buttons = document.querySelectorAll(".button");
-
-//     ipPlaceholder.innerText = currentIP || "unknown"
-
-
-    //Following functions are required for background service module
-
 
     return {
         init: init,

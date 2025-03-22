@@ -13,7 +13,7 @@ var configurationZero = {
     "buttonsSettings":{
         "Button1":{
             "name":"Button 1",
-            "backgroundColor":"blue",
+            "backgroundColor":"#0008ff",
             "backgroundImage":"",
             "connectionType":"udp", 
             "connectionPort":5000,
@@ -22,7 +22,7 @@ var configurationZero = {
         },
         "Button2":{
             "name":"Button 2",
-            "backgroundColor":"blue",
+            "backgroundColor":"#0008ff",
             "backgroundImage":"",
             "connectionType":"udp",
             "connectionPort":5000,
@@ -31,7 +31,7 @@ var configurationZero = {
         },
         "Button3":{
             "name":"Button 3",
-            "backgroundColor":"blue",
+            "backgroundColor":"#0008ff",
             "backgroundImage":"",
             "connectionType":"tcp", 
             "connectionPort":5000,
@@ -40,7 +40,7 @@ var configurationZero = {
         },
         "Button4":{
             "name":"Button 4",
-            "backgroundColor":"blue",
+            "backgroundColor":"#0008ff",
             "backgroundImage":"",
             "connectionType":"tcp", 
             "connectionPort":5000,
@@ -49,7 +49,7 @@ var configurationZero = {
         },
         "Button5":{
             "name":"Button 5",
-            "backgroundColor":"blue",
+            "backgroundColor":"#0008ff",
             "backgroundImage":"",
             "connectionType":"tcp", 
             "connectionPort":5000,
@@ -58,7 +58,7 @@ var configurationZero = {
         },
         "Button6":{
             "name":"Button 6",
-            "backgroundColor":"blue",
+            "backgroundColor":"#0008ff",
             "backgroundImage":"",
             "connectionType":"tcp", 
             "connectionPort":5000,
@@ -67,7 +67,7 @@ var configurationZero = {
         },
         "Button7":{
             "name":"Button 7",
-            "backgroundColor":"blue",
+            "backgroundColor":"#0008ff",
             "backgroundImage":"",
             "connectionType":"tcp", 
             "connectionPort":5000,
@@ -76,7 +76,7 @@ var configurationZero = {
         },
         "Button8":{
             "name":"Button 8",
-            "backgroundColor":"blue",
+            "backgroundColor":"#0008ff",
             "backgroundImage":"",
             "connectionType":"tcp", 
             "connectionPort":5000,
@@ -85,7 +85,7 @@ var configurationZero = {
         },
         "Button9":{
           "name":"Button 9",
-          "backgroundColor":"blue",
+          "backgroundColor":"#0008ff",
           "backgroundImage":"",
           "connectionType":"tcp", 
           "connectionPort":5000,
@@ -94,7 +94,7 @@ var configurationZero = {
       },
       "Button10":{
         "name":"Button 10",
-        "backgroundColor":"blue",
+        "backgroundColor":"#0008ff",
         "backgroundImage":"",
         "connectionType":"tcp", 
         "connectionPort":5000,
@@ -104,7 +104,6 @@ var configurationZero = {
     }
 }
 var configuration = {}
-
 
 // counter
 var counter = 0
@@ -158,215 +157,6 @@ function isEmpty(value) {
     return value == null || value.length === 0;
   }
   
-
-// Printer Related functions:
-var Printer = {
-		  isPortOpen: false,
-		  getSerialPrintVersion: function () {
-		    var Version = null;
-		    try {
-		      Version = window.b2bapis.serialprint.getVersion();
-		    } catch (e) {
-		      console.log(
-		        "[SerialPrint API][getVersion] call syncFunction exception [" +
-		          e.code +
-		          "] name: " +
-		          e.name +
-		          " message: " +
-		          e.message
-		      );
-		    }
-		    if (null !== Version) {
-		      console.log(
-		        "[SerialPrint API][getVersion] call syncFunction type: " + Version
-		      );
-		    }
-		  },
-
-		  openSerialPrint: function () {
-		    console.log("[SerialPrint API][open] function call");
-		    if (Printer.isPortOpen == true) {
-		      console.log("Serial port is open");
-		      return;
-		    }
-		    var option = null;
-		    var result = false;
-		    option = {
-		      // First Data Terminal
-		    //  baudRate: 9600,
-		      // Bixolon Printer
-		      baudRate: 115200,
-		      parity: "NONE",
-		      dataBits: "BITS8",
-		      stopBits: "1",
-		    };
-
-		    console.log(option.baudRate);
-
-		    //	if (BANDRATE_STATUS) option.baudRate = 115200;
-
-		    var printPort = "PRINTERPORT1";
-
-		    function onlistener(printSerialData) {
-		      console.log(
-		        "[SerialPrint API] Print serial data is " +
-		          printSerialData.data +
-		          ", Print serial Port is === " +
-		          printSerialData.result
-		      );
-		      if (printSerialData.data == "00") {
-		        console.log("Paper status 00 - paper inside printer");
-		      } else if (printSerialData.data == "03") {
-		        console.log("Paper status 03 - no paper inside printer");
-		      }
-		    }
-		    try {
-		      console.log("BaudRate: " + option.baudRate);
-		      result = window.b2bapis.serialprint.open(printPort, option, onlistener);
-		      if (result == true) {
-		        console.log("[SerialPrint API]Success to open print serial port");
-		        Printer.isPortOpen = true;
-		      } else {
-		        console.log("[SerialPrint API]Fail to open print serial port" + result);
-		      }
-		    } catch (e) {
-		      /*if (!BANDRATE_STATUS) {
-		        BANDRATE_STATUS = true;
-		        openSerialPrint()
-		      }*/
-		      console.log(
-		        "[SerialPrint API][open] call syncFunction exception " +
-		          e.code +
-		          " " +
-		          e.errorName +
-		          " " +
-		          e.errorMessage
-		      );
-		    }
-		  },
-
-		  closeSerialPrint: function () {
-		    console.log("[SerialPrint API][close] function call");
-		    var result = false;
-		    var printPort = "PRINTERPORT1";
-
-		    try {
-		      result = window.b2bapis.serialprint.close(printPort);
-		      if (result == false) {
-		        console.log("[SerialPrint API]Fail to close print serial port");
-		      }
-		    } catch (e) {
-		      console.log(
-		        "[SerialPrint API][close] call syncFunction exception " +
-		          e.code +
-		          " " +
-		          e.errorName +
-		          " " +
-		          e.errorMessage
-		      );
-		    }
-		  },
-
-		  checkIfPaperInPrinter: function () {
-		    console.log("[SerialPrint API][checkIfPaperInPrinter] function call");
-		    var result = false;
-		    var printPort = "PRINTERPORT1";
-		    var command = "1b76";
-
-		    try {
-		      result = window.b2bapis.serialprint.writeData(
-		        printPort,
-		        command,
-		        command.length
-		      );
-		      console.log("[SerialPrint API][writeData_0] writeData size is " + result);
-		    } catch (e) {
-		      console.log(
-		        "[SerialPrint API][writeData] call syncFunction exception " +
-		          e.code +
-		          " " +
-		          e.errorName +
-		          " " +
-		          e.errorMessage
-		      );
-		    }
-		  },
-
-		  writeReceipt: function (message) {
-		    console.log("[SerialPrint API][write] function call");
-		    var receiptData, data;
-		    var result = false;
-		    var printPort = "PRINTERPORT1";
-		    if (message == undefined) {
-		      receiptData = Printer.generateReceiptData();
-		      data = Printer.stringToHexReceipt(receiptData);
-		    } else {
-		      data = Printer.stringToHexReceipt(message + "\n\n\n\n\n\n\n\n\n\n");
-		    }
-
-		    try {
-		      // console.log(data);
-		      result = window.b2bapis.serialprint.writeData(
-		        printPort,
-		        data,
-		        data.length
-		      );
-		      console.log("[SerialPrint API][writeData_0] writeData size is " + result);
-		    } catch (e) {
-		      console.log(
-		        "[SerialPrint API][writeData] call syncFunction exception " +
-		          e.code +
-		          " " +
-		          e.errorName +
-		          " " +
-		          e.errorMessage
-		      );
-		    }
-		  },
-
-		  generateReceiptData: function () {
-		    var d = new Date();
-		    var receiptData =
-		      "test message" +
-		      "                                          \n" +
-		      "                                          \n" +
-		      "                                          \n" +
-		      "                                          \n" +
-		      "                                          \n";
-
-		    return receiptData;
-		  },
-
-		  stringToHexReceipt: function (tmp) {
-		    var str = "";
-		    var tmp_len = tmp.length;
-		    var c;
-
-		    for (var i = 0; i < tmp_len; i += 1) {
-		      c = tmp.charCodeAt(i).toString(16);
-		      c == "a" ? (c = "0A") : null;
-		      str += c.toString(16);
-
-		      i == tmp_len - 1 ? (str += "1B69") : null;
-		    }
-		    return str;
-		  },
-
-		  numberSpaces: function (number) {
-		    var total = number.toFixed(2).toString().split(".");
-		    if (total[0].length == 1) {
-		      total[0] = "   " + total[0];
-		    } else if (total[0].length == 2) {
-		      total[0] = "  " + total[0];
-		    } else if (total[0].length == 3) {
-		      total[0] = " " + total[0];
-		    }
-		    total = total[0] + "." + total[1];
-		    return total;
-		  },
-		};
-
-// Closing Printer rlated part
 
 
 //Communication with service
@@ -468,7 +258,6 @@ var messageManager = (function () {
             setTimeout( connectToRemote() ,10) ; //due to performance tuning on Tz7.0 and the CPU priority change, function has to be invoked async
             serviceLaunched = true;
           setTimeout(() =>  writeConfigFirstTime(configurationZero), 100) ;
-          // setTimeout(() =>  writeConfig(configurationZero), 300) ;
           setTimeout(() =>  readConfig(configuration), 500) ;
       }
       if (data[0].value === "startedWEB") {
@@ -492,6 +281,21 @@ var messageManager = (function () {
         localMsgPort.removeMessagePortListener(watchId);
         serviceLaunched = false;
       }
+
+      if (data[0].key === "update") {
+        console.log("App received updated Config from Settings backend ")
+          
+        configuration = JSON.parse(data[0].value)
+        
+        writeConfig(configuration) // write the new configuration to disk
+        console.log("new configurtation: " + JSON.stringify(configuration))
+       
+        sendTest(JSON.stringify(configuration), "settings")       // send the new configuration to backend server   
+
+        updateButtons() // update the frontend
+        console.log("updated?...")
+      }
+
     }
 
     
@@ -598,6 +402,8 @@ function readConfig() {
               configuration = JSON.parse(content)
               sendToWeb(JSON.stringify(configuration), "settings")
               sendTest(JSON.stringify(configuration), "settings")
+              updateButtons();
+
           }, function(error) {
               console.error('Error opening file stream: ' + error.message);
           });
@@ -618,6 +424,20 @@ function readConfig() {
     };
   })();
 
+  function updateButtons() {
+    console.log("calles updatButton...")
+    Object.keys(configuration.buttonsSettings).forEach((buttonKey, index) => {
+        let buttonClass = `.item${index + 1}`;
+        let buttonElement = document.querySelector(buttonClass);
+
+        if (buttonElement) {
+          // console.log(`Updating frontpage : Text is: ${configurationZero.buttonsSettings[buttonKey].name}`)
+            buttonElement.querySelector("p").textContent = configuration.buttonsSettings[buttonKey].name;
+            buttonElement.style.backgroundColor = configuration.buttonsSettings[buttonKey].backgroundColor;
+            buttonElement.style.backgroundImage = configuration.buttonsSettings[buttonKey].backgroundImage;
+        }
+    });
+}
   
   //Initialize function
 var init = function () {
@@ -660,22 +480,6 @@ var init = function () {
 
     var buttons = document.querySelectorAll(".button");
   
-  
-    function updateButtons() {
-      Object.keys(configurationZero.buttonsSettings).forEach((buttonKey, index) => {
-          let buttonClass = `.item${index + 1}`;
-          let buttonElement = document.querySelector(buttonClass);
-
-          if (buttonElement) {
-            // console.log(`Updating frontpage : Text is: ${configurationZero.buttonsSettings[buttonKey].name}`)
-              buttonElement.querySelector("p").textContent = configurationZero.buttonsSettings[buttonKey].name;
-              buttonElement.style.backgroundColor = configurationZero.buttonsSettings[buttonKey].backgroundColor;
-              buttonElement.style.backgroundImage = configurationZero.buttonsSettings[buttonKey].backgroundImage;
-          }
-      });
-  }
-
-  updateButtons();
 
     ipPlaceholder.innerText = currentIP || "unknown"    
     	
@@ -773,7 +577,7 @@ var init = function () {
           break;
         case 13: //OK button
         
-          		title.classList.remove("hidden");
+          		title.classList.toggle("hidden");
           		setTimeout(function () {title.classList.add("hidden")}, 20000)
           	
           break;
