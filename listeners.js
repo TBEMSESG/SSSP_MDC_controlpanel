@@ -268,7 +268,7 @@ var messageManager = (function () {
       if (data[0].key === "targetIP") {
         	console.log("App received targetIP from Backend: " + data[0].value )
             targetIP = data[0].value
-            ipTarget.innerText = targetIP
+            //  ipTarget.innerText = targetIP
             // setTimeout(() => {sendToWeb("targetIP", data[0].value )}, 15000) // Forwards the IP address to the Web Server backend
           }
       
@@ -426,15 +426,25 @@ function readConfig() {
 
   function updateButtons() {
     console.log("calles updatButton...")
+
     Object.keys(configuration.buttonsSettings).forEach((buttonKey, index) => {
+   
+        var button = configuration.buttonsSettings[buttonKey];
+
+
         let buttonClass = `.item${index + 1}`;
         let buttonElement = document.querySelector(buttonClass);
-
         if (buttonElement) {
-          // console.log(`Updating frontpage : Text is: ${configurationZero.buttonsSettings[buttonKey].name}`)
-            buttonElement.querySelector("p").textContent = configuration.buttonsSettings[buttonKey].name;
-            buttonElement.style.backgroundColor = configuration.buttonsSettings[buttonKey].backgroundColor;
-            buttonElement.style.backgroundImage = configuration.buttonsSettings[buttonKey].backgroundImage;
+          if (!button.name || button.name.trim() === "") {
+            buttonElement.style.display = "none";
+          } else {
+            buttonElement.style.display = "block";
+            buttonElement.querySelector("p").textContent = button.name;
+            buttonElement.style.backgroundColor = button.backgroundColor || "";
+            buttonElement.style.backgroundImage = button.backgroundImage
+              ? `url(${button.backgroundImage})`
+              : "none";
+          }
         }
     });
 }
@@ -443,24 +453,10 @@ function readConfig() {
 var init = function () {
       // TODO:: Do your initialization job
       console.log("App init() called");
-      
-      var comms = ["uno","due","tre", "quattro", "cinque", "sei", "sette","otto","nove","dieci","undici","dodici","tredici"];
-      
+            
       test = document.querySelector(".test");
 
-      //document.addEventListener("visibilitychange", function () {
-      //if (document.hidden) {
-        // Something you want to do when hide or exit.
-      //} else {
-        // Something you want to do when resume.
-      //}
-    //});
-      
-      //Printer.openSerialPrint();
-      // Printer.checkIfPaperInPrinter();
-
   
-      
       
     // Listeners
     var title = document.querySelector(".title");
@@ -483,20 +479,20 @@ var init = function () {
 
     ipPlaceholder.innerText = currentIP || "unknown"    
     	
-    	  // getSubmit from Settings: 
-        document.getElementById('myForm').addEventListener('submit', function(event) {
-            // Prevent the form from submitting in the traditional way
-            event.preventDefault();
+    	  // // getSubmit from Settings: 
+        // document.getElementById('myForm').addEventListener('submit', function(event) {
+        //     // Prevent the form from submitting in the traditional way
+        //     event.preventDefault();
 
-            // Get the value from the input field
-            var userInput = document.getElementById('userInput').value;
+        //     // Get the value from the input field
+        //     var userInput = document.getElementById('userInput').value;
             
-            if (userInput !== "") {
-          	  messageManager.sendTest(userInput, "settings");
-          	  targetIP = userInput
-          	  ipTarget.innerText = userInput
-            }
-        });    	
+        //     if (userInput !== "") {
+        //   	  messageManager.sendTest(userInput, "settings");
+        //   	  targetIP = userInput
+        //   	  ipTarget.innerText = userInput
+        //     }
+        // });    	
     	
 
   	

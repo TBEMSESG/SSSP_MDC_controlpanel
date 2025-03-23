@@ -36,7 +36,7 @@ var messageManager = (function () {
         listenerId = localMsgPort.addMessagePortListener(onMessageReceived);
         
         
-        sendMessage( hosts, "targetIP") // sends the hardcoded Target IP to the frontend
+        // sendMessage( hosts, "targetIP") // sends the hardcoded Target IP to the frontend
         sendCommand("started");  // sends the confirmatieno thet the service is started
         sendMessage("BG Started")
         //runServer();
