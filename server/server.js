@@ -1,17 +1,10 @@
-//var sendMDC = require('./Middleware/sendMdc.js')
-//var sendUDP = sendMDC.sendUDP
 const net = require('net');
-
 var dgram = require('dgram');
 var http = require('http');
 var fs = require('fs');
 var path = require('path');
-// var sendTcpCommand = require('./tcpClient');
 
 // Env settings
-
-var hosts = "10.10.99.150"  //to be changed from Frontend settings?
-var portUDP = 5000;
 
 var configuration = {}
 
