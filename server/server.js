@@ -1,9 +1,12 @@
 //var sendMDC = require('./Middleware/sendMdc.js')
 //var sendUDP = sendMDC.sendUDP
+const net = require('net');
+
 var dgram = require('dgram');
 var http = require('http');
 var fs = require('fs');
 var path = require('path');
+// var sendTcpCommand = require('./tcpClient');
 
 // Env settings
 
@@ -76,12 +79,21 @@ var messageManager = (function () {
         
         
         if (data[0].key === "myUDP") {
-                sendMessage("myUDP Key received, going to sendUDP with comamand: " + value.connectionCommand);
+                sendMessage("Backend Key received, going to send command with comamand: " + value.connectionCommand);
                 try {
-                    // Assuming `hosts` and `portUDP` are defined and valid
-                    // atm, only one 
-                    sendUDP(value.connectionTarget[0], value.connectionPort, value.connectionCommand);
-                    sendMessage(`UDP message sent successfully to ${value.connectionTarget[0]}`);
+
+                    if (value.connectionType === "udp") {
+                        sendUDP(value.connectionTarget[0], value.connectionPort, value.connectionCommand);
+                        sendMessage(`UDP message sent successfully to ${value.connectionTarget[0]}`);
+                        }
+
+                    if (value.connectionType === "tcp") {
+                        sendTcpCommand(value.connectionTarget[0], value.connectionPort, value.connectionCommand);
+                        sendMessage(`TCP message sent successfully to ${value.connectionTarget[0]}`);
+                        }
+    
+
+                        
                 } catch (error) {
                     sendMessage("Failed to send UDP message: " + error.message);
                     console.error("UDP sending error: ", error);
@@ -121,6 +133,41 @@ var messageManager = (function () {
             socket.close();
         });
     }
+
+    function sendTcpCommand(targetIP, targetPort, command, callback) {
+        var client = new net.Socket();
+      
+        client.connect(targetPort, targetIP, () => {
+          try {
+            sendMessage(`[TCP] Connected to ${targetIP}:${targetPort}`);
+            var cleanedHex = command.replace(/\s+/g, ''); // "AA1100010012"
+            var commandBuffer = new Buffer(cleanedHex, 'hex'); // Compatible with old Node
+            client.write(commandBuffer);
+            
+          } catch (err) {
+            sendMessage(`[TCP] Exception during connect/write: ${err.message}`);
+            if (callback) callback(err);
+            client.destroy(); // Ensure the socket is closed
+          }
+        });
+      
+        client.on('data', (data) => {
+          sendMessage(`[TCP] Received: ${data.toString()}`);
+          client.end();
+          if (callback) callback(null, data);
+        });
+      
+        client.on('error', (err) => {
+          sendMessage(`[TCP] Error: ${err.message}`);
+          if (callback) callback(err);
+        });
+      
+        client.on('close', () => {
+          sendMessage(`[TCP] Connection closed...`);
+        });
+      }
+      
+
 
     return {
         init: init,

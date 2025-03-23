@@ -13,13 +13,22 @@
             <h1>Settings Page</h1>
         </header>
         <section>
-                <p>This Page allows for changing Button settings on the device. All modifications are saved directly on the device and are
-                persistent as long as the app is installed. You can reboot the device freely, data persist. <br>
-                TCP connections will follow shortly. At the moment, <b>only UDP</b> (Event Triggers) can be used.
-                </p>
-                <p>
-                Leave the name of the button empty to hide the button from the touchscreen.
-                </p>
+            <p>
+                This page allows you to configure the button settings on your device. All modifications are saved directly on the device and remain <b>persistent</b> as long as the app is installed. You can reboot the device freely — your data will be retained.
+              </p>
+              
+              <p>
+                <ul>
+                    <li>UDP - Sends the string as is. Feel free to enter any command to be sent.
+                    </li>
+<li>TCP - Sends HEX commands (MDC) to the device, Please format the command as "AA 13 00 01 00 14" for Mute OFF.</li>
+                </ul>
+              </p>
+              
+              <p>
+                To <b>hide a button</b> from the touchscreen interface, simply leave its <i>Name</i> field empty.
+              </p>
+              
 
 
         </section>
@@ -58,7 +67,7 @@
                     <label>Background Color: <input type="color" name="${buttonKey}-backgroundColor" value="${button.backgroundColor}"></label><br>
                     <label>Connection Type: 
                         <select name="${buttonKey}-connectionType">
-                            <!--  <option value="tcp" ${button.connectionType === "tcp" ? "selected" : ""}>TCP</option> -->
+                            <option value="tcp" ${button.connectionType === "tcp" ? "selected" : ""}>TCP</option>
                             <option value="udp" ${button.connectionType === "udp" ? "selected" : ""}>UDP</option>
                         </select>
                     </label><br>

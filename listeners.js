@@ -558,6 +558,7 @@ var init = function () {
 
     // });
 
+    tizen.tvinputdevice.registerKey('Info')
 
 
     // add eventListener for keydown
@@ -573,9 +574,12 @@ var init = function () {
           break;
         case 13: //OK button
         
-          		title.classList.toggle("hidden");
-          		setTimeout(function () {title.classList.add("hidden")}, 20000)
+ 
           	
+          break;
+        case 457: //INFO Button
+              title.classList.toggle("hidden");
+              setTimeout(function () {title.classList.add("hidden")}, 20000)
           break;
         case 10009: //RETURN button
           tizen.application.getCurrentApplication().exit();
