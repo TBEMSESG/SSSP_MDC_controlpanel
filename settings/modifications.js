@@ -1,6 +1,3 @@
-var currentIP2 = webapis.network.getIp() || "unknown"
-setTimeout(() => console.log(currentIP2), 5000)
-
 var container = document.getElementById('buttonsContainer');
 container.innerHTML = ""
 var config = {}
