@@ -1,13 +1,14 @@
 # Touchscreen Button Configuration Interface
 
-This project provides a local web-based interface for configuring a set of touchscreen buttons. The configuration is stored on the device and persists across reboots as long as the app is installed.
+This project provides an SSSP Application for Samsung Tizen devices (Tz 2.4+) with a local web-based interface for configuring a set of touchscreen buttons. 
 
 ## 🤩 Features
 
+- Touchscreen can be used to send MDC or Event Triggers (tcp / udp) to one or more devices
 - Visual editor for up to 10 customizable buttons
 - Supports name, color, image, connection type, target IP, port, and command
 - Button layout auto-hides buttons with no name
-- Live button preview with color and image
+- Live button preview with color
 - Background image uploader for each button (roadmap)
 - Configuration is editable in-browser and saved directly to the device
 - Persists across device restarts

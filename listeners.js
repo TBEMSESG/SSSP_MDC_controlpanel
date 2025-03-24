@@ -6,6 +6,14 @@ var serviceLaunchedWeb = false;
 var test;
 var temp;
 
+
+var device = {
+  ipAddress: "unknown",
+  firmwareVersion: "unknown",
+  modelCode: "unknown",
+  appVersion: "unknown"
+}
+
   // Demo data only test
 var configurationZero = {
 
@@ -133,7 +141,7 @@ function launchService() {
         console.log("launchService " + serviceId + " failed: " + e.message);
       }
     );
-    // Launch web SErvice for Settings
+    // Launch web Service for Settings
     tizen.application.launchAppControl(
       new tizen.ApplicationControl(
         "http://tizen.org/appcontrol/operation/pick",
@@ -259,6 +267,7 @@ var messageManager = (function () {
             serviceLaunched = true;
           setTimeout(() =>  writeConfigFirstTime(configurationZero), 100) ;
           setTimeout(() =>  readConfig(configuration), 500) ;
+
       }
       if (data[0].value === "startedWEB") {
         console.log("App received Started from Backend")
@@ -402,7 +411,7 @@ function readConfig() {
               configuration = JSON.parse(content)
               sendToWeb(JSON.stringify(configuration), "settings")
               sendTest(JSON.stringify(configuration), "settings")
-              updateButtons();
+              setTimeout(() => updateButtons(), 500 );
 
           }, function(error) {
               console.error('Error opening file stream: ' + error.message);
@@ -472,7 +481,7 @@ var init = function () {
     var button8 = document.querySelector(".item8");
     var button9 = document.querySelector(".item9");
     var button10 = document.querySelector(".item10");
-   
+    var deviceInfo = document.querySelector('.deviceInfo')
 
     var buttons = document.querySelectorAll(".button");
   
@@ -590,6 +599,18 @@ var init = function () {
       }
     });
   
+    try {
+      device.ipAddress = webapis.network.getIp();
+      device.firmwareVersion = webapis.productinfo.getFirmware()
+      device.modelCode = webapis.productinfo.getRealModel();
+      device.appVersion = tizen.application.getCurrentApplication()
+      device.packageVersion = tizen.package.getPackageInfo();
+      deviceInfo.innerHTML = `<br>DEBUG:<br>App Version: <b>${device.appVersion.appInfo.version}</b><br>Package Version: <b>${device.packageVersion.version}</b> <br>Device Model Code: <b>${device.modelCode}</b> running Firmware Version: <b>${device.firmwareVersion}</b>.<br> Press <b>INFO</b> again to hide this window...`
+ 
+    } catch (e) {
+      console.log("getIp exception [" + e.code + "] name: " + e.name + " message: " + e.message);
+    }
+
     messageManager.init();
     launchService();
     //setTimeout(function() {}, 5000);

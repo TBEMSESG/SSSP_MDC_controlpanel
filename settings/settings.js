@@ -78,7 +78,18 @@ var messageManager = (function () {
     	      res.end(data);
     	    });
     	  }
-
+    	  else if (req.url === '/modifications.js') {
+    	    var filePath = path.join(__dirname, '..',  'settings','modifications.js');
+    	    fs.readFile(filePath, 'utf8', function(err, data) {
+    	      if (err) {
+    	        res.writeHead(500, { 'Content-Type': 'text/plain' });
+    	        res.end('Server Error');
+    	        return;
+    	      }
+    	      res.writeHead(200, { 'Content-Type': 'application/javascript' });
+    	      res.end(data);
+    	    });
+    	  }
         else if (req.url === '/config' && req.method === 'GET') {
 
     	      res.writeHead(200, { 'Content-Type': 'application/json' });

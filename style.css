@@ -17,6 +17,10 @@ body{
   justify-content: center;
 }
 
+.deviceInfo {
+  color: red;
+  font-size: 2rem;
+}
 
 .button  {
   margin: 0 20px;
