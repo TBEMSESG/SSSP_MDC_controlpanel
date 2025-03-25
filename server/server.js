@@ -70,23 +70,23 @@ var messageManager = (function () {
 			try {
 				if (value.connectionType === "udp") {
 					sendUDP(
-						value.connectionTarget[0],
+						value.connectionTarget,
 						value.connectionPort,
 						value.connectionCommand
 					);
 					sendMessage(
-						`UDP message sent successfully to ${value.connectionTarget[0]}`
+						`UDP message sent successfully to ${value.connectionTarget}`
 					);
 				}
 
 				if (value.connectionType === "tcp") {
-					sendTcpCommand(
-						value.connectionTarget[0],
+					sendTcp(
+						value.connectionTarget,
 						value.connectionPort,
 						value.connectionCommand
 					);
 					sendMessage(
-						`TCP message sent successfully to ${value.connectionTarget[0]}`
+						`TCP message sent successfully to ${value.connectionTarget}`
 					);
 				}
 			} catch (error) {
@@ -105,10 +105,10 @@ var messageManager = (function () {
 		}
 	}
 
-	function sendUDP(host, port, command) {
+	function sendUDP(hosts, port, command) {
 		sendMessage(
 			"BG - Invoked sendUDP with: host=" +
-				host +
+				hosts +
 				", port=" +
 				port +
 				", command=" +
@@ -118,30 +118,43 @@ var messageManager = (function () {
 		// Create a buffer from the command using the older Buffer constructor
 		var message = new Buffer(command);
 
-		sendMessage(
-			"BG - Prepared message buffer: " +
-				message +
-				" with length: " +
-				message.length
-		);
+		// Send an UDP to each host in the hosts array
+		hosts.forEach(host => {
+			sendOne(host, port, message);
+		});
 
-		// Create UDP socket
-		var socket = dgram.createSocket("udp4");
+		function sendOne(host, port, message) {
+			sendMessage(
+				"BG - Prepared message buffer: " +
+					message +
+					" with length: " +
+					message.length
+			);
 
-		sendMessage("BG - Socket created...");
+			// Create UDP socket
+			var socket = dgram.createSocket("udp4");
 
-		// to be added : host is array, create a for loop to sen to multi targets
+			sendMessage("BG - Socket created...");
 
-		// Send the UDP message
-		socket.send(message, 0, message.length, port, host, function (err) {
-			if (err) {
-				sendMessage("BG - Error sending UDP message: " + err.message);
-			} else {
-				sendMessage(
-					"BG - UDP message sent successfully to " + host + ":" + port
-				);
-			}
-			socket.close();
+			// to be added : host is array, create a for loop to sen to multi targets
+
+			// Send the UDP message
+			socket.send(message, 0, message.length, port, host, function (err) {
+				if (err) {
+					sendMessage("BG - Error sending UDP message: " + err.message);
+				} else {
+					sendMessage(
+						"BG - UDP message sent successfully to " + host + ":" + port
+					);
+				}
+				socket.close();
+			});
+		}
+	}
+
+	function sendTcp(hosts, port, command) {
+		hosts.forEach(host => {
+			sendTcpCommand(host, port, command);
 		});
 	}
 
