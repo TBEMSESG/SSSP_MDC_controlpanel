@@ -1,54 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css" />
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="style.css" />
 
-    <title>Settings</title>
-    </head>
-    <body>
-        
-        <header>
-            <h1>Settings Page</h1>
-        </header>
-        <section>
-            <p>
-                This page allows you to configure the button settings on your device. All modifications are saved directly on the device and remain <b>persistent</b> as long as the app is installed. You can reboot the device freely — your data will be retained.
-              </p>
-              
-              <p>
-                <ul>
-                    <li>UDP - Sends the string as is. Feel free to enter any command to be sent.
-                    </li>
-<li>TCP - Sends HEX commands (MDC) to the device, Please format the command as "AA 13 00 01 00 14" for Mute OFF.</li>
-                </ul>
-              </p>
-              
-              <p>
-                To <b>hide a button</b> from the touchscreen interface, simply leave its <i>Name</i> field empty.
-              </p>
-              <p>
-              --> Please do not add more than one image at a time! This will be corrected shortly!
-              </p>
-              
+		<title>Settings</title>
+	</head>
+	<body>
+		<header>
+			<h1>Settings Page</h1>
+		</header>
+		<section>
+			<p>
+				This page allows you to configure the button settings on your device.
+				All modifications are saved directly on the device and remain
+				<b>persistent</b> as long as the app is installed. You can reboot the
+				device freely — your data will be retained.
+			</p>
 
+			<ul>
+				<li>
+					UDP - Sends the string as is. Feel free to enter any command to be
+					sent.
+				</li>
+				<li>
+					TCP - Sends HEX commands (MDC) to the device, Please format the
+					command as "AA 13 00 01 00 14" for Mute OFF.
+				</li>
+			</ul>
 
-        </section>
-        <button type="button" id="exportConfigBtn">Export Config as JSON</button>
-        <input type="file" id="importConfigInput" accept="application/json" style="display:none;">
-<button type="button" id="importConfigBtn">Import Config from JSON</button>
-        <h2>Button Configuration Editor</h2>
-        
-        <div id="naja">
-        <form id="configForm">
-            
-            <button type="submit">Save Changes</button>
-            <div id="buttonsContainer">This is the place for the container</div>
-            <button type="submit">Save Changes</button>
-        </form>
-    </div>
+			<p>
+				To <b>hide a button</b> from the touchscreen interface, simply leave its
+				<i>Name</i> field empty.
+			</p>
+			<p>
+				- Please do not add more than one image at a time! This will be
+				corrected shortly!
+			</p>
+		</section>
 
- <script src="modifications.js"></script>
-    </body>
+		<button type="button" id="exportConfigBtn">Export Config as JSON</button>
+		<input
+			type="file"
+			id="importConfigInput"
+			accept="application/json"
+			style="display: none"
+		/>
+		<button type="button" id="importConfigBtn">Import Config from JSON</button>
+		<h2>Button Configuration Editor</h2>
+
+		<div id="naja">
+			<form id="configForm">
+				<button type="submit">Save Changes</button>
+				<div id="buttonsContainer">This is the place for the container</div>
+				<button type="submit">Save Changes</button>
+			</form>
+		</div>
+
+		<script src="modifications.js"></script>
+	</body>
 </html>
