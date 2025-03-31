@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns:tizen="http://tizen.org/ns/widgets" xmlns="http://www.w3.org/ns/widgets"
-    id="https://vxtdev.a2016.dev/kiosk/" version="1.0.0" height="1080" width="1920"
+    id="https://vxtdev.a2016.dev/kiosk/" version="1.0.7" height="1080" width="1920"
     viewmodes="fullscreen">
     <access origin="*" subdomains="true"></access>
     <tizen:application id="hlHpt0841o.CONNECTKiosk"
