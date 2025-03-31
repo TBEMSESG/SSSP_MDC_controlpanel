@@ -1,5 +1,8 @@
 var container = document.getElementById("buttonsContainer");
 container.innerHTML = "";
+var bg_container = document.getElementById("backgroundContainer");
+bg_container.innerHTML = "";
+
 var config = {};
 
 fetch("/config")
@@ -8,7 +11,15 @@ fetch("/config")
 		console.log("Config Loaded:", fetchedConfig);
 		config = fetchedConfig;
 
-		// Example: Update buttons dynamically
+		const bg_div = document.createElement("div");
+		bg_div.innerHTML = `
+			<br>
+			<label>Screen Background Color: <input type="color" name="Screen-backgroundColor" value="${
+				config.screenBackgroundColor || "#0008ff"
+			}"></label><br><br>
+		`;
+		bg_container.appendChild(bg_div);
+
 		Object.keys(config.buttonsSettings).forEach(buttonKey => {
 			const button = config.buttonsSettings[buttonKey];
 
@@ -92,6 +103,8 @@ document
 	.addEventListener("submit", function (event) {
 		event.preventDefault();
 		let formData = new FormData(event.target);
+
+		config.screenBackgroundColor = formData.get(`Screen-backgroundColor`);
 
 		Object.keys(config.buttonsSettings).forEach(buttonKey => {
 			config.buttonsSettings[buttonKey].name = formData.get(

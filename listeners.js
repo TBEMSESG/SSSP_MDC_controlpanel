@@ -458,7 +458,7 @@ function updateButtons() {
 	console.log("calles updatButton...");
 
 	if (configuration.screenBackgroundColor) {
-		let screenBackGround = document.querySelector(control_grid);
+		let screenBackGround = document.querySelector(`.control_grid`);
 		screenBackGround.style.backgroundColor =
 			configuration.screenBackgroundColor;
 	}
