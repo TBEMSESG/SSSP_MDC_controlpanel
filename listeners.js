@@ -16,6 +16,7 @@ var device = {
 // Demo data only test
 var configurationZero = {
 	buttonsQty: 8,
+	screenBackgroundColor: "#0008ff",
 	buttonsSettings: {
 		Button1: {
 			name: "Button 1",
@@ -455,6 +456,12 @@ var messageManager = (function () {
 
 function updateButtons() {
 	console.log("calles updatButton...");
+
+	if (configuration.screenBackgroundColor) {
+		let screenBackGround = document.querySelector(control_grid);
+		screenBackGround.style.backgroundColor =
+			configuration.screenBackgroundColor;
+	}
 
 	Object.keys(configuration.buttonsSettings).forEach((buttonKey, index) => {
 		var button = configuration.buttonsSettings[buttonKey];
