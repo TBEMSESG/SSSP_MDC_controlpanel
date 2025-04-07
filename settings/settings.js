@@ -45,7 +45,60 @@ var messageManager = (function () {
 				res.writeHead(200, { "Content-Type": "text/html" });
 				res.end(data);
 			});
+		} else if (req.url === "/uploadImage" && req.method === "POST") {
+			let body = [];
+			let filename = `button-${Date.now()}.png`;
+
+			req.on("data", chunk => {
+				body.push(chunk);
+			});
+
+			req.on("end", () => {
+				const buffer = Buffer.concat(body);
+				const base64Data = buffer.toString("base64"); // convert to base64 for writing as text
+
+				try {
+					tizen.filesystem.resolve(
+						"wgt-private", // or 'images', or 'documents' if needed
+						function (dir) {
+							let file = dir.createFile(filename);
+							file.openStream(
+								"w",
+								function (fs) {
+									fs.write(base64Data); // write as base64 string
+									fs.close();
+
+									res.writeHead(200, { "Content-Type": "application/json" });
+									res.end(
+										JSON.stringify({
+											success: true,
+											filename: filename,
+											path: `/images/${filename}`, // your serving path
+										})
+									);
+								},
+								function (err) {
+									res.writeHead(500);
+									res.end(
+										JSON.stringify({ success: false, error: err.message })
+									);
+								},
+								"UTF-8"
+							);
+						},
+						function (err) {
+							res.writeHead(500);
+							res.end(JSON.stringify({ success: false, error: err.message }));
+						},
+						"rw"
+					);
+				} catch (e) {
+					res.writeHead(500);
+					res.end(JSON.stringify({ success: false, error: e.message }));
+				}
+			});
 		}
+
 		// Serve the css file (adjust path accordingly if needed)
 		else if (req.url === "/style.css") {
 			var filePath = path.join(__dirname, "..", "settings", "style.css");
