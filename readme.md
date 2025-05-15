@@ -16,6 +16,9 @@ This project provides an SSSP Application for Samsung Tizen devices (Tz 2.4+) wi
 
 ## 🚀 Getting Started
 
+Install app directly on the screen by pointing customURL to :
+https://vxtdev.a2016.dev/sssp/mdccontrol
+
 ### 1. Clone / Install the Project
 
 > tbc
